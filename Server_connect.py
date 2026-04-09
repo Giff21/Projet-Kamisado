@@ -23,12 +23,18 @@ def pingRequest():
     }
 
 s = socket.socket()
-s.close("172.17.10.41", 3000)
 address = ("172.17.10.41", 3000) #port 3000  par défaut
 s.connect(address) 
 if s.connect(address) == True:
     print("Connected")
-    inscription()
+
+chunks = []
+finished = False
+while not finished :
+    data = client.recv (1024)
+    chunks . append ( data )
+    finished = data == b""
+    print (b"". join ( chunks ) . decode () )
 
 s.listen()
 # while True:
@@ -44,7 +50,7 @@ try:
 except json.JSONDecodeError:
     print("Erreur de décodage JSON")
 
-
+s.close()
 msg = input("msg : ", )
 sent = msg.encode("utf-8")
 s.send(sent)
