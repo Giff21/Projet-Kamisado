@@ -3,13 +3,13 @@ import json
 
 
 
-with open("dict.json","r") as file:
+with open("dict.json","rw") as file:
     content = json.loads("file")
 with open("dict.json","w") as file:
          json.dumps
 
 s = socket.socket()
-address = ("172.17.10.41", 5000)
+address = ("172.17.10.41", 3000) #port 3000  par défaut
 s.connect(address) 
 if s.connect(address) == True:
     print("Connected")
