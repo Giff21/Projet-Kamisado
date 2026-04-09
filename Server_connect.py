@@ -1,4 +1,12 @@
 import socket
+import json
+
+
+
+with open("dict.json","r") as file:
+    content = json.loads("file")
+with open("dict.json","w") as file:
+         json.dumps
 
 s = socket.socket()
 address = ("172.17.10.41", 5000)
