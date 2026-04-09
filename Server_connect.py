@@ -23,8 +23,12 @@ def pingRequest():
     }
 
 s = socket.socket()
-address = ("172.17.10.41", 3000) #port 3000  par défaut
-s.connect(address) 
+try:
+    address = ("172.17.10.41", 3000) #port 3000  par défaut
+    s.connect(address) 
+except OSError :
+    print ("Serveur introuvable , connexion impossible .")
+     
 if s.connect(address) == True:
     print("Connected")
 
