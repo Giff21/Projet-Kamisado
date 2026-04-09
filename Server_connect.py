@@ -34,7 +34,7 @@ except OSError :
 
 inscription()
 ls = socket.socket()
-ls.bind(("0:0:0:0",8888))
+ls.bind(("localhost",8888))
 
 print (ls. getsockname () )
 
