@@ -11,12 +11,13 @@ def inscription():
     inscription_Json ={
         "request": "subscribe",
         "port": 8888,
-        "name": "Je suis la",
+        "name": "U+1F624",
         "matricules": ["12345", "67890"]
     }
     message = json.dumps(inscription_Json).encode()
     s.send(struct.pack("I", len(message)))
     s.send(message)
+
 
 def pingRequest():
      ping ={
@@ -30,17 +31,24 @@ try:
 except OSError :
     print ("Serveur introuvable , connexion impossible .")
 
-if s.connect==True:
-     inscription()
 
-# s.listen(8888)
-# chunks = []
-# finished = False
-# while not finished :
-#     data = address.recv (1024)
-#     chunks . append ( data )
-#     finished = data == b""
-#     print (b"". join ( chunks ) . decode () )
+inscription()
+ls = socket.socket()
+ls.bind(("0:0:0:0",8888))
+
+print (ls. getsockname () )
+
+ls.listen(8888)
+chunks = []
+finished = False
+while not finished :
+    data = ls.recv (2048)
+    chunks . append ( data )
+    finished = data == b""
+    print (b"". join ( chunks ) . decode () )
+print(s.recv(2048))
+
+
 
 # def _compute (self) :
 #     totalsent = 0
