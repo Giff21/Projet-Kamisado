@@ -9,7 +9,7 @@ with open("dict.json","w") as file:
          json.dumps
 
 s = socket.socket()
-address = ("172.17.10.41", 3000)
+address = ("172.17.10.41", 3000) #port 3000  par défaut
 s.connect(address) 
 if s.connect(address) == True:
     print("Connected")
