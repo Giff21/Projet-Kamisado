@@ -1,18 +1,74 @@
 import socket
 import json
+import struct
 
+# with open("dict.json","r") as file:
+#     content = json.loads("file")
+# with open("dict.json","w") as file:
+#          json.dumps
 
+def inscription():
+    inscription_Json ={
+        "request": "subscribe",
+        "port": 8888,
+        "name": "Je suis la",
+        "matricules": ["12345", "67890"]
+    }
+    message = json.dumps(inscription_Json).encode()
+    s.send(struct.pack("I", len(message)))
+    s.send(message)
 
-with open("dict.json","rw") as file:
-    content = json.loads("file")
-with open("dict.json","w") as file:
-         json.dumps
+def pingRequest():
+     ping ={
+        "response": "pong"
+    }
 
 s = socket.socket()
-address = ("172.17.10.41", 3000) #port 3000  par défaut
-s.connect(address) 
-if s.connect(address) == True:
-    print("Connected")
-msg = input("msg : ", )
-sent = msg.encode("utf-8")
-s.send(sent)
+try:
+    address = ("172.17.10.41", 3000) #port 3000  par défaut
+    s.connect(address) 
+except OSError :
+    print ("Serveur introuvable , connexion impossible .")
+
+if s.connect==True:
+     inscription()
+
+# s.listen(8888)
+# chunks = []
+# finished = False
+# while not finished :
+#     data = address.recv (1024)
+#     chunks . append ( data )
+#     finished = data == b""
+#     print (b"". join ( chunks ) . decode () )
+
+# def _compute (self) :
+#     totalsent = 0
+#     msg = pickle.dumps ( self . __data )
+#     self . __s . send ( struct.pack ("I", len ( msg )))
+#     while totalsent < len ( msg ):
+#         sent = self . __s . send ( msg [ totalsent :])
+#         totalsent += sent
+#     return struct.unpack ("I", self . __s . recv (4) ) [0]
+
+# chunks = []
+# finished = False
+# while not finished :
+#     data = client.recv (1024)
+#     chunks . append ( data )
+#     finished = data == b""
+#     print (b"". join ( chunks ) . decode () )
+
+# s.listen()
+# while True:
+#     packet = address.recv(1024)
+#     if not packet: break
+#     data += packet
+            
+# # Décodage et traitement du JSON
+# try:
+#     json_data = json.loads(data.decode('utf-8'))
+#     print("Données JSON reçues :", json_data)
+#     # Exemple d'accès : print(json_data['cle'])
+# except json.JSONDecodeError:
+#     print("Erreur de décodage JSON")
