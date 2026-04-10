@@ -2,6 +2,13 @@ import socket
 import json
 import struct
 
+def send_json(s, data: dict) -> None:  #https://oneuptime.com/blog/post/2026-03-20-json-over-ipv4-sockets-python/view
+    """Serialize data to JSON and send with a 4-byte length prefix."""
+    payload = json.dumps(data).encode("utf-8")
+    # Pack the length as a 4-byte big-endian unsigned integer
+    header = struct.pack(">I", len(payload))
+    s.sendall(header + payload)
+
 def inscription():
     inscription_Json ={
         "request": "subscribe",
@@ -9,10 +16,11 @@ def inscription():
         "name": "U+1F624",
         "matricules": ["24087", "24092"]
     }
-    message = json.dumps(inscription_Json).encode()
-    s.send(struct.pack("I", len(message)))
-    s.send(message)
-    print("sent inscription request")
+    send_json(address,inscription_Json)
+    # message = json.dumps(inscription_Json).encode()
+    # s.send(struct.pack("I", len(message)))
+    # s.send(message)
+    # print("sent inscription request")
 
 def pingRequest(message):
     pong ={
