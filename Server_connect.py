@@ -33,20 +33,22 @@ except OSError :
 
 
 inscription()
-ls = socket.socket()
-ls.bind(("localhost",8888))
+# ls = socket.socket()
+# ls.bind(("localhost",8888))
 
-print (ls. getsockname () )
+# print (ls. getsockname () )
 
-ls.listen(8888)
-chunks = []
-finished = False
-while not finished :
-    data = ls.recv (2048)
-    chunks . append ( data )
-    finished = data == b""
-    print (b"". join ( chunks ) . decode () )
-print(s.recv(2048))
+# ls.listen(8888)
+# ls.accept()
+# chunks = []
+# finished = False
+# while not finished :
+#     data = ls.recv (2048)
+#     chunks . append ( data )
+#     finished = data == b""
+#     print (b"". join ( chunks ). decode () )
+#     print (data.decode())
+# print(s.recv(2048))
 
 
 
