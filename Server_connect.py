@@ -31,24 +31,29 @@ try:
 except OSError :
     print ("Serveur introuvable , connexion impossible .")
 
-
 inscription()
-# ls = socket.socket()
-# ls.bind(("localhost",8888))
+print(s.recv(32))
 
-# print (ls. getsockname () )
-
-# ls.listen(8888)
-# ls.accept()
-# chunks = []
-# finished = False
-# while not finished :
-#     data = ls.recv (2048)
-#     chunks . append ( data )
-#     finished = data == b""
-#     print (b"". join ( chunks ). decode () )
-#     print (data.decode())
-# print(s.recv(2048))
+ls = socket.socket()
+ls.bind(("localhost",8888))
+ls.settimeout(0.5)
+while True:
+    try: 
+        client, adress = ls.accept()
+        with client:
+            message = client.recv(4)
+            message.decode()
+            print(message)      #recieve ping in json (ok)
+            #if ping then send pong message in json
+            if json.loads(message) == "ping":  #ERROR I just want the word ping 
+                pong = {
+                      "response": "pong"
+                }
+                message = json.dumps(pong).encode()
+                s.send(struct.pack("I", len(message)))
+                s.send(message)
+    except socket.timeout:
+        pass
 
 
 
