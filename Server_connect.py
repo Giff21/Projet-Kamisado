@@ -23,6 +23,8 @@ def pingRequest(message):
     s.send(message)
 
 s = socket.socket()
+ls = socket.socket()
+ls.bind(("localhost",8888))
 try:
     address = ("172.17.83.69", 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
@@ -31,9 +33,14 @@ except OSError :
     print ("Serveur introuvable , connexion impossible .")
 
 inscription()
+# Décodage et traitement du JSON
+data = s.recv(32)
+try:
+    json_data = json.loads(data.decode('utf-8'))
+    print("Données JSON reçues :", json_data["response"])
+except json.JSONDecodeError:
+    print("Erreur de décodage JSON")
 
-ls = socket.socket()
-ls.bind(("localhost",8888))
 ls.settimeout(0.5)
 while True:
     try: 
