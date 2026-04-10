@@ -34,10 +34,10 @@ except OSError :
 
 inscription()
 # Décodage et traitement du JSON
-data = s.recv(32)
+data = s.recv(64)
 try:
-    json_data = json.loads(data.decode('utf-8'))
-    print("Données JSON reçues :", json_data["response"])
+    json_data = json.loads(data.decode())
+    print("Données JSON reçues :", json_data )#["response"])
 except json.JSONDecodeError:
     print("Erreur de décodage JSON")
 
