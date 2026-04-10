@@ -2,37 +2,35 @@ import socket
 import json
 import struct
 
-# with open("dict.json","r") as file:
-#     content = json.loads("file")
-# with open("dict.json","w") as file:
-#          json.dumps
-
 def inscription():
     inscription_Json ={
         "request": "subscribe",
         "port": 8888,
         "name": "U+1F624",
-        "matricules": ["12345", "67890"]
+        "matricules": ["24087", "24092"]
     }
     message = json.dumps(inscription_Json).encode()
     s.send(struct.pack("I", len(message)))
     s.send(message)
+    print("sent inscription request")
 
-
-def pingRequest():
-     ping ={
+def pingRequest(message):
+    pong ={
         "response": "pong"
     }
+    message = json.dumps(pong).encode()
+    s.send(struct.pack("I", len(message)))
+    s.send(message)
 
 s = socket.socket()
 try:
     address = ("172.17.83.69", 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
+    print("connected")
 except OSError :
     print ("Serveur introuvable , connexion impossible .")
 
 inscription()
-print(s.recv(32))
 
 ls = socket.socket()
 ls.bind(("localhost",8888))
@@ -41,17 +39,12 @@ while True:
     try: 
         client, adress = ls.accept()
         with client:
-            message = client.recv(4)
+            message = client.recv()
             message.decode()
             print(message)      #recieve ping in json (ok)
             #if ping then send pong message in json
             if json.loads(message) == "ping":  #ERROR I just want the word ping 
-                pong = {
-                      "response": "pong"
-                }
-                message = json.dumps(pong).encode()
-                s.send(struct.pack("I", len(message)))
-                s.send(message)
+                pingRequest(message)
     except socket.timeout:
         pass
 
