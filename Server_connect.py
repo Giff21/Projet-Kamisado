@@ -2,12 +2,28 @@ import socket
 import json
 import struct
 
-def send_json(s, data: dict) -> None:  #https://oneuptime.com/blog/post/2026-03-20-json-over-ipv4-sockets-python/view
+def send_json( data: dict) -> None:  #https://oneuptime.com/blog/post/2026-03-20-json-over-ipv4-sockets-python/view
     """Serialize data to JSON and send with a 4-byte length prefix."""
-    payload = json.dumps(data).encode("utf-8")
+    message = json.dumps(data).encode("utf-8")
     # Pack the length as a 4-byte big-endian unsigned integer
-    header = struct.pack(">I", len(payload))
-    s.sendall(header + payload)
+    header = struct.pack("I", len(message))
+    s.send(header + message)
+
+def recv_json(sock: socket.socket) -> dict:
+    """Receive a length-prefixed JSON message from the socket."""
+    # Read exactly 4 bytes for the length header
+    raw_len = recvn(sock, 4)
+    if not raw_len:
+        raise ConnectionError("Connection closed while reading header")
+
+    msg_len = struct.unpack(">I", raw_len)[0]
+
+    # Read exactly msg_len bytes for the payload
+    raw_payload = recvn(sock, msg_len)
+    if not raw_payload:
+        raise ConnectionError("Connection closed while reading payload")
+
+    return json.loads(raw_payload.decode("utf-8"))
 
 def inscription():
     inscription_Json ={
@@ -16,13 +32,14 @@ def inscription():
         "name": "U+1F624",
         "matricules": ["24087", "24092"]
     }
-    send_json(address,inscription_Json)
+    send_json(inscription_Json)
+    print("insciption sent")
     # message = json.dumps(inscription_Json).encode()
     # s.send(struct.pack("I", len(message)))
     # s.send(message)
     # print("sent inscription request")
 
-def pingRequest(message):
+def pingRequest():
     pong ={
         "response": "pong"
     }
@@ -34,7 +51,7 @@ s = socket.socket()
 ls = socket.socket()
 ls.bind(("localhost",8888))
 try:
-    address = ("172.17.83.69", 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('10.0.0.144', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print("connected")
 except OSError :
@@ -42,12 +59,8 @@ except OSError :
 
 inscription()
 # Décodage et traitement du JSON
-data = s.recv(64)
-try:
-    json_data = json.loads(data.decode())
-    print("Données JSON reçues :", json_data )#["response"])
-except json.JSONDecodeError:
-    print("Erreur de décodage JSON")
+data = s.recv(48)
+
 
 ls.settimeout(0.5)
 while True:
@@ -59,7 +72,7 @@ while True:
             print(message)      #recieve ping in json (ok)
             #if ping then send pong message in json
             if json.loads(message) == "ping":  #ERROR I just want the word ping 
-                pingRequest(message)
+                pingRequest()
     except socket.timeout:
         pass
 
