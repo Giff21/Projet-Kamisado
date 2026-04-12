@@ -25,6 +25,16 @@ def recv_json(sock: socket.socket) -> dict:
 
     return json.loads(raw_payload.decode("utf-8"))
 
+def recvn(sock: socket.socket, n: int) -> bytes:
+    """Read exactly n bytes from the socket."""
+    buf = b""
+    while len(buf) < n:
+        chunk = sock.recv(n - len(buf))
+        if not chunk:
+            return b""
+        buf += chunk
+    return buf
+
 def inscription():
     inscription_Json ={
         "request": "subscribe",
@@ -58,10 +68,10 @@ except OSError :
     print ("Serveur introuvable , connexion impossible .")
 
 inscription()
+print(recv_json(address))
+
 # Décodage et traitement du JSON
 data = s.recv(48)
-
-
 ls.settimeout(0.5)
 while True:
     try: 
