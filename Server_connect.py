@@ -61,7 +61,7 @@ s = socket.socket()
 ls = socket.socket()
 ls.bind(("localhost",8888))
 try:
-    address = ('10.0.0.144', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.17.83.94', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print("connected")
 except OSError :
