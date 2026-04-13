@@ -12,24 +12,24 @@ def send_json( data: dict) -> None:  #https://oneuptime.com/blog/post/2026-03-20
 def recv_json(sock: socket.socket) -> dict:
     """Receive a length-prefixed JSON message from the socket."""
     # Read exactly 4 bytes for the length header
-    raw_len = recvn(sock, 4)
+    raw_len = recvn(4)
     if not raw_len:
         raise ConnectionError("Connection closed while reading header")
-
+    
     msg_len = struct.unpack(">I", raw_len)[0]
-
+    
     # Read exactly msg_len bytes for the payload
-    raw_payload = recvn(sock, msg_len)
+    raw_payload = recvn(msg_len)
     if not raw_payload:
         raise ConnectionError("Connection closed while reading payload")
 
     return json.loads(raw_payload.decode("utf-8"))
 
-def recvn(sock: socket.socket, n: int) -> bytes:
+def recvn(n: int) -> bytes:
     """Read exactly n bytes from the socket."""
     buf = b""
     while len(buf) < n:
-        chunk = sock.recv(n - len(buf))
+        chunk = s.recv(n - len(buf))
         if not chunk:
             return b""
         buf += chunk
@@ -81,7 +81,7 @@ while True:
             message.decode()
             print(message)      #recieve ping in json (ok)
             #if ping then send pong message in json
-            if json.loads(message) == "ping":  #ERROR I just want the word ping 
+            if json.loads(message['reponse']) == "ping":  #ERROR I just want the word ping 
                 pingRequest()
     except socket.timeout:
         pass
