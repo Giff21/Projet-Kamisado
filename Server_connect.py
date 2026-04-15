@@ -13,13 +13,11 @@ def recv_json(sock: socket.socket) -> dict:
     """Receive a length-prefixed JSON message from the socket."""
     # Read exactly 4 bytes for the length header
     raw_len = recvn(sock,4)
-#    print("HEADER RAW:", raw_len)
 
     if not raw_len:
         raise ConnectionError("Connection closed while reading header")
     
     msg_len = struct.unpack("<I", raw_len)[0] # "<I" = Little-endian
-#    print("LONGUEUR ATTENDUE:", msg_len)
 
     # Read exactly msg_len bytes for the payload
     raw_payload = recvn(sock,msg_len)
@@ -33,7 +31,7 @@ def recvn(s:socket.socket, n: int) -> bytes:
     buf = b""
     while len(buf) < n:
         chunk = s.recv(n - len(buf))
-#        print("RECU:", chunk)
+
         if not chunk:
             return b""
         buf += chunk
@@ -77,48 +75,12 @@ ls.listen()
 while True:
     try: 
         client, adress = ls.accept()
-        
         with client:
             recu =recv_json(client)
             print(recu)
-            # print(message)      #recieve ping in json (ok)
-            #if ping then send pong message in json
             if recu['request'] == "ping":  #ERROR I just want the word ping 
                 print("PING")
                 pingRequest(client)
                 print("PONG")
     except socket.timeout:
         pass
-
-
-
-# def _compute (self) :
-#     totalsent = 0
-#     msg = pickle.dumps ( self . __data )
-#     self . __s . send ( struct.pack ("I", len ( msg )))
-#     while totalsent < len ( msg ):
-#         sent = self . __s . send ( msg [ totalsent :])
-#         totalsent += sent
-#     return struct.unpack ("I", self . __s . recv (4) ) [0]
-
-# chunks = []
-# finished = False
-# while not finished :
-#     data = client.recv (1024)
-#     chunks . append ( data )
-#     finished = data == b""
-#     print (b"". join ( chunks ) . decode () )
-
-# s.listen()
-# while True:
-#     packet = address.recv(1024)
-#     if not packet: break
-#     data += packet
-            
-# # Décodage et traitement du JSON
-# try:
-#     json_data = json.loads(data.decode('utf-8'))
-#     print("Données JSON reçues :", json_data)
-#     # Exemple d'accès : print(json_data['cle'])
-# except json.JSONDecodeError:
-#     print("Erreur de décodage JSON")
