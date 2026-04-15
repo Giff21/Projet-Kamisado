@@ -2,7 +2,7 @@ import socket
 import json
 import struct
 
-def send_json( data: dict) -> None:  #https://oneuptime.com/blog/post/2026-03-20-json-over-ipv4-sockets-python/view
+def send_json(s,data: dict) -> None:  #https://oneuptime.com/blog/post/2026-03-20-json-over-ipv4-sockets-python/view
     """Serialize data to JSON and send with a 4-byte length prefix."""
     message = json.dumps(data).encode("utf-8")
     # Pack the length as a 4-byte big-endian unsigned integer
@@ -39,56 +39,54 @@ def recvn(s:socket.socket, n: int) -> bytes:
         buf += chunk
     return buf
 
-def inscription():
+def inscription(s):
     inscription_Json ={
         "request": "subscribe",
         "port": 8888,
         "name": "U+1F624",
         "matricules": ["24087", "24092"]
     }
-    send_json(inscription_Json)
+    send_json(s,inscription_Json)
     print("insciption sent")
-    # message = json.dumps(inscription_Json).encode()
-    # s.send(struct.pack("I", len(message)))
-    # s.send(message)
-    # print("sent inscription request")
 
-def pingRequest():
+def pingRequest(clientSock):
     pong ={
-        "response": "pong"
+    "response": "pong"
     }
-    message = json.dumps(pong).encode()
-    s.send(struct.pack("I", len(message)))
-    s.send(message)
+    send_json(clientSock,pong)
+    print('ping sent')
 
 #############################################
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+ls = socket.socket()
+ls.bind(("0.0.0.0",8888))
+
 try:
-    address = ('10.0.0.144', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.20.10.2', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
     print ("Serveur introuvable , connexion impossible .")
 
-inscription()
-recv_json(s)
+inscription(s)
+print(recv_json(s))
 
-
-# Décodage et traitement du JSON
-ls = socket.socket()
-ls.bind(("localhost",8888))
-ls.settimeout(0.5)
+ls.settimeout(2)
+ls.listen()
 while True:
     try: 
         client, adress = ls.accept()
+        
         with client:
-            message = client.recv()
-            message.decode()
-            print(message)      #recieve ping in json (ok)
+            recu =recv_json(client)
+            print(recu)
+            # print(message)      #recieve ping in json (ok)
             #if ping then send pong message in json
-            if json.loads(message['reponse']) == "ping":  #ERROR I just want the word ping 
-                pingRequest()
+            if recu['request'] == "ping":  #ERROR I just want the word ping 
+                print("PING")
+                pingRequest(client)
+                print("PONG")
     except socket.timeout:
         pass
 
