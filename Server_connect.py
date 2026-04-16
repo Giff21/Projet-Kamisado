@@ -61,15 +61,32 @@ def FindPawn(headColor, iniState,Pawncolor) :
                 print(iniState[i][j][1])
                 if headColor is None:
                     a =random.randint(0,7)
-                    return print('start'), print((7,a))
+                    return 'start', [7,a]
                 elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
                     print(i,j)
                     pos =[i,j]
-                    return print(pos)
+                    return pos
 
-def MOVE(s,state,pawnColor):
+def move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> list:
+    currentPosition = [JEF_towerPositionLine, JEF_towerPositionColomn]
+    
+    if JEF_currentInStateJson == 0:
+        if play == 'forward':
+            finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]]
+        if play == 'Rdiagonal':
+            finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]+random.randint(0,currentPosition[1])]
+        if play == 'Ldiagonal':
+            finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]-random.randint(0,currentPosition[1])]
 
-    Sendmove(s,movePlay)
+    elif JEF_currentInStateJson == 1:
+        if play == 'forward':
+            finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]]
+        if play == 'Rdiagonal':
+            finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]-random.randint(0,7-currentPosition[1])]
+        if play == 'Ldiagonal':
+            finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]+random.randint(0,7-currentPosition[1])]
+
+    return [currentPosition, finalPosition]
 
 def Sendmove(s,the_move_played):
     Move ={
@@ -111,7 +128,7 @@ while True:
                 iniState = recu['state']['board']
                 headColor = recu['state']['color']
                 print(f"headColor is {headColor}, and type {type(headColor)}")
-                if recu['state']['players'] == "GIGA BYTE  BLYAT": # ==name of AI
+                if recu['state']['current'] == 0: # ==name of AI
                     Pawncolor = 'dark'
                     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
                 else:
