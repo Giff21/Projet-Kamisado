@@ -57,15 +57,15 @@ def pingRequest(clientSock):
 def FindPawn(headColor, iniState,Pawncolor) :
     for i in range(8):
         for j in range(8):
-            if iniState[i][j][1] != 'null' :
+            if iniState[i][j][1] != None :
                 print(iniState[i][j][1])
-                if headColor == 'null':
-                    a =random.randint(0,8)
-                    return 'start', (8,a)
+                if headColor is None:
+                    a =random.randint(0,7)
+                    return print('start'), print((7,a))
                 elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
                     print(i,j)
                     pos =[i,j]
-                    return pos
+                    return print(pos)
 
 def MOVE(s,state,pawnColor):
 
@@ -86,7 +86,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('172.17.10.46', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.17.10.38', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
@@ -118,7 +118,7 @@ while True:
                     Pawncolor = 'light'
                     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
 
-                FindPawn(Pawncolor,iniState,Pawncolor)
+                FindPawn(headColor,iniState,Pawncolor)
 
     except socket.timeout:
         pass

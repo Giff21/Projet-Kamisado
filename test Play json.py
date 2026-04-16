@@ -1,3 +1,4 @@
+import random
 recu ={
    "request": "play",
    "lives": 3,
@@ -84,19 +85,24 @@ recu ={
       ["orange", ["pink", "dark"]]
     ]
   ],
-  "color": 'null',
+  "color": 'red',
   "current": 0,
   "players": ["LUR", "FKY"]
 }
 }
 
 def FindPawn(headColor: str, iniState:list,pawnColor : str)  : #  str) -> tuple : 
-    # if color =='null':
-    #     return None
-    # else:
-        for i in range(8):
-            if headColor == iniState[i][0]:
-                return print(f"color is {headColor} and is found in {i} row")
+    for i in range(8):
+        for j in range(8):
+            if iniState[i][j][1] != 'null' :
+                #print(iniState[i][j][1])
+                if headColor == 'null':
+                    a =random.randint(0,8)
+                    return print('start'), print((8,a))
+                elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
+                    print(i,j)
+                    pos =[i,j+1]
+                    return print(pos)
 
 
 def Sendmove(s,the_move_played):
@@ -112,18 +118,14 @@ print('PLAY')
 print(f"il reste {recu["lives"]} vie ")
 iniState = recu['state']['board']
 headColor = recu['state']['color']
+print("current:",recu['state']['current'])
 print(f"headColor is {headColor}, and type {type(headColor)}")
-if recu['state']['players'] == "GIGA BYTE  BLYAT": # ==name of AI
+if recu['state']['current'] == 0: # ==name of AI
     Pawncolor = 'dark'
     print(f"PawnColor is {Pawncolor}, and type type(Pawncolor)")
 else:
     Pawncolor = 'light'
     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
-for i in range(8):
-    for j in range(8):
-        if iniState[i][j][1] != 'null' :
-            print(iniState[i][j][1])
-            if headColor not in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
-                print(i,j)
+FindPawn(headColor,iniState,Pawncolor)
 
 #FindPawn(headColor,iniState,Pawncolor)
