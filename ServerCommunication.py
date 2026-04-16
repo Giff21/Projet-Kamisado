@@ -5,7 +5,7 @@ import random
 
 
 #----------- send the connection message in TCP------------
-serverAddress = ('172.17.10.46', 3000)  #ip and port of teacher
+serverAddress = ('172.17.10.38', 3000)  #ip and port of teacher
 myAdress = ('0.0.0.0', 8888)    #my IP and listening port
 
 my_data ={
@@ -80,6 +80,7 @@ while True:
                 move_message = json.dumps(move_data).encode('utf-8')
                 client.send(struct.pack("I", len(move_message)))
                 client.send(move_message)
+                print(move_data)
             
     except socket.timeout:
         pass
