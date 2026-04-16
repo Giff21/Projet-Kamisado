@@ -101,7 +101,6 @@ while True:
             print(recu)
             if recu['request'] == "ping":  #ERROR I just want the word ping 
                 pingRequest(client)
-
             if recu['request'] == "play":
                 print('PLAY')
                 print(f"il reste {recu["lives"]} vie ")
@@ -113,7 +112,7 @@ while True:
                 else:
                     Pawncolor = 'light'
                     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
-               
+                    
                 FindPawn(Pawncolor,iniState,Pawncolor)
 
     except socket.timeout:

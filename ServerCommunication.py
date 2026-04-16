@@ -1,26 +1,55 @@
 import socket
 import struct
 import json
+import random
 
-# send the connection message in TCP
-serverAddress = ('10.28.157.176', 3000)  #ip and port of teacher
+
+#----------- send the connection message in TCP------------
+serverAddress = ('172.17.10.46', 3000)  #ip and port of teacher
 myAdress = ('0.0.0.0', 8888)    #my IP and listening port
 
-bot_data ={
+my_data ={
     "request": "subscribe",
     "port": 8888,
-    "name": "SexyWizard",
+    "name": "Anita Max Wynn",
     "matricules": ["24092", "24087"]
 }
 
 s = socket.socket()
 s.connect(serverAddress)
-message = json.dumps(bot_data).encode('utf-8')
+message = json.dumps(my_data).encode('utf-8')
 s.send(struct.pack("I", len(message)))
 s.send(message)
 print(s.recv(32).decode('utf-8'))   #receive 'ok' to confirm connection with bot_data information
 
-#listen ping and answer pong in TCP
+#--------AI---------
+def move(JEF_towerPosition : list, JEF_currentInStateJson : int, forward : bool, Rdiagonal:bool, Ldiagonal : bool) -> list:
+    currentPosition = [JEF_towerPositionLine, JEF_towerPositionColomn]
+    dx = random.randint(0,7)
+    dy = random.randint(0,7)
+    if JEF_currentInStateJson == 0:
+        if forward:
+            finalPosition = [currentPosition[0]-dy, currentPosition[0]]
+        if Rdiagonal:
+            finalPosition = [currentPosition[0]-dy, currentPosition[0]+dx]
+        if Ldiagonal:
+            finalPosition = [currentPosition[0]-dy, currentPosition[0]-dx]
+
+    elif JEF_currentInStateJson == 1:
+        if forward:
+            finalPosition = [currentPosition[0]+dy, currentPosition[0]]
+        if Rdiagonal:
+            finalPosition = [currentPosition[0]+dy, currentPosition[0]-dx]
+        if Ldiagonal:
+            finalPosition = [currentPosition[0]+dy, currentPosition[0]+dx]
+
+    return [currentPosition, finalPosition]
+
+
+
+
+
+#-------------listen ping and answer pong in TCP-------------
 #(desactiver les deux pare-feux windows defender dans pare-feux windows defender pour recevoir les messages)
 pps = socket.socket()
 pps.bind(myAdress)
@@ -31,9 +60,12 @@ while True:
     try:
         client, address = pps.accept()
         with client:
-            ping_message = client.recv(32).decode('utf-8')  #receive ping
-            print(ping_message)
-            if "ping" in ping_message:
+            len_info = client.recv(4)
+            len_mes = struct.unpack("I", len_info)[0] #4byte en int de tuple(int,) où on prand le 1er
+            client_message = client.recv(len_mes).decode('utf-8')  #receive ping
+
+            print(client_message)
+            if "ping" in client_message:
                 pong_data = {
                     "response": "pong"
                 }
@@ -41,6 +73,9 @@ while True:
                 client.send(struct.pack("I", len(pong_message)))
                 client.send(pong_message)   #send pong
                 print(pong_data)
+            if "play" in client_message:
+                print(client_message)
+            
     except socket.timeout:
         pass
 
