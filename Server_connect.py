@@ -18,7 +18,7 @@ def recv_json(sock: socket.socket) -> dict:
         raise ConnectionError("Connection closed while reading header")
     
     msg_len = struct.unpack("<I", raw_len)[0] # "<I" = Little-endian
-
+    print(msg_len)
     # Read exactly msg_len bytes for the payload
     raw_payload = recvn(sock,msg_len)
     if not raw_payload:
@@ -31,7 +31,6 @@ def recvn(s:socket.socket, n: int) -> bytes:
     buf = b""
     while len(buf) < n:
         chunk = s.recv(n - len(buf))
-
         if not chunk:
             return b""
         buf += chunk
@@ -41,7 +40,7 @@ def inscription(s):
     inscription_Json ={
         "request": "subscribe",
         "port": 8888,
-        "name": "U+1F624",
+        "name": "GIGA BYTE  BLYAT",
         "matricules": ["24087", "24092"]
     }
     send_json(s,inscription_Json)
@@ -54,6 +53,18 @@ def pingRequest(clientSock):
     send_json(clientSock,pong)
     print('ping sent')
 
+def MOVE(s,state):
+
+    Sendmove(s,movePlay)
+
+def Sendmove(s,the_move_played):
+    Move ={
+   "response": "move",
+   "move": the_move_played,
+   "message": "Fun message"
+    }
+    send_json(s,Move)
+
 #############################################
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -61,7 +72,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('172.20.10.2', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.17.10.46', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
@@ -79,8 +90,13 @@ while True:
             recu =recv_json(client)
             print(recu)
             if recu['request'] == "ping":  #ERROR I just want the word ping 
-                print("PING")
                 pingRequest(client)
-                print("PONG")
+
+            if recu['request'] == "play":
+                print('PLAY')
+                print(f"il reste {recu["lives"]} vie ")
+                iniState = recu['state']['board']
+                print(iniState)
+
     except socket.timeout:
         pass
