@@ -29,19 +29,19 @@ def move(JEF_towerPosition : list, JEF_currentInStateJson : int, forward : bool,
     dy = random.randint(0,7)
     if JEF_currentInStateJson == 0:
         if forward:
-            finalPosition = [currentPosition[0]-dy, currentPosition[0]]
+            finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]]
         if Rdiagonal:
-            finalPosition = [currentPosition[0]-dy, currentPosition[0]+dx]
+            finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]+random.randint(0,currentPosition[1])]
         if Ldiagonal:
-            finalPosition = [currentPosition[0]-dy, currentPosition[0]-dx]
+            finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]-random.randint(0,currentPosition[1])]
 
     elif JEF_currentInStateJson == 1:
         if forward:
-            finalPosition = [currentPosition[0]+dy, currentPosition[0]]
+            finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]]
         if Rdiagonal:
-            finalPosition = [currentPosition[0]+dy, currentPosition[0]-dx]
+            finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]-random.randint(0,7-currentPosition[1])]
         if Ldiagonal:
-            finalPosition = [currentPosition[0]+dy, currentPosition[0]+dx]
+            finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]+random.randint(0,7-currentPosition[1])]
 
     return [currentPosition, finalPosition]
 
