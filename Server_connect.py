@@ -53,7 +53,17 @@ def pingRequest(clientSock):
     send_json(clientSock,pong)
     print('ping sent')
 
-def MOVE(s,state):
+def FindPawn(headColor, iniState,Pawncolor) -> list:
+    for i in range(8):
+        for j in range(8):
+            if iniState[i][j][1] != 'null' :
+                print(iniState[i][j][1])
+                if headColor not in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
+                    print(i,j)
+                    pos =[i,j]
+                    return pos
+
+def MOVE(s,state,pawnColor):
 
     Sendmove(s,movePlay)
 
@@ -96,7 +106,15 @@ while True:
                 print('PLAY')
                 print(f"il reste {recu["lives"]} vie ")
                 iniState = recu['state']['board']
-                print(iniState)
+                headColor = recu['state']['color']
+                if recu['state']['players'] == "GIGA BYTE  BLYAT": # ==name of AI
+                    Pawncolor = 'dark'
+                    print(f"PawnColor is {Pawncolor}, and type type(Pawncolor)")
+                else:
+                    Pawncolor = 'light'
+                    print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
+               
+                FindPawn(Pawncolor,iniState,Pawncolor)
 
     except socket.timeout:
         pass
