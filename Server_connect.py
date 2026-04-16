@@ -54,7 +54,7 @@ def pingRequest(clientSock):
     send_json(clientSock,pong)
     print('ping sent')
 
-def PLAY(recu):
+def PLAY(s,recu):
     iniState = recu['state']['board']
     headColor = recu['state']['color']
     current = recu['state']['current']
@@ -115,10 +115,11 @@ def Sendmove(s,the_move_played,name):
                    f"Am I real ?", f"{name} CPU is burning", f"SMASH, next question", f"{name} just did a 6 7 !", f"No Bitches?",
                    f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
                    ,f"Are we done ?"]
+    Fun_message = fun_message[random.randint(0,len(fun_message))]
     Move ={
    "response": "move",
    "move": the_move_played,
-   "message": "Fun_message"
+   "message": Fun_message
     }
     send_json(s,Move)
 
@@ -129,7 +130,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('172.17.10.38', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('10.0.0.144', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
@@ -151,7 +152,7 @@ while True:
             if recu['request'] == "play":
                 print('PLAY')
                 print(f"il reste {recu["lives"]} vie ")
-                PLAY(recu)
+                PLAY(s,recu)
                 # iniState = recu['state']['board']
                 # headColor = recu['state']['color']
                 # print(f"headColor is {headColor}, and type {type(headColor)}")
