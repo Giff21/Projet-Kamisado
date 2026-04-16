@@ -54,6 +54,24 @@ def pingRequest(clientSock):
     send_json(clientSock,pong)
     print('ping sent')
 
+def PLAY(recu):
+    iniState = recu['state']['board']
+    headColor = recu['state']['color']
+    current = recu['state']['current']
+    if current == 0:
+        Pawncolor = 'dark'
+        print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
+        ennemi = recu['state']['players'][1]
+    else:
+        Pawncolor = 'light'
+        print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
+        ennemi = recu['state']['players'][0]
+    
+    pawnPos, start = FindPawn(headColor,iniState,Pawncolor)
+    moveToPlay = Move(pawnPos,current,start)
+    Sendmove(s,moveToPlay,ennemi)
+    
+    
 def FindPawn(headColor, iniState,Pawncolor) :
     for i in range(8):
         for j in range(8):
@@ -61,14 +79,16 @@ def FindPawn(headColor, iniState,Pawncolor) :
                 print(iniState[i][j][1])
                 if headColor is None:
                     a =random.randint(0,7)
-                    return 'start', [7,a]
+                    return [7,a], 'start'
                 elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
                     print(i,j)
                     pos =[i,j]
-                    return pos
+                    return pos, "going"
+    raise ValueError("no Pawn found :(")
 
-def move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> list:
-    currentPosition = [JEF_towerPositionLine, JEF_towerPositionColomn]
+def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> list:
+
+    currentPosition = [JEF_towerPosition[0], JEF_towerPosition[1]]
     
     if JEF_currentInStateJson == 0:
         if play == 'forward':
@@ -88,11 +108,13 @@ def move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> 
 
     return [currentPosition, finalPosition]
 
-def Sendmove(s,the_move_played):
+def Sendmove(s,the_move_played,name):
+    fun_message = [f"{name} did a bold move !", f"{name} just subscribed to my OnlyFans !", f"domain expansion: 'Nah, I'd win ",
+                   f"BOT LOBBY", f"gg ez"]
     Move ={
    "response": "move",
    "move": the_move_played,
-   "message": "Fun message"
+   "message": "Fun_message"
     }
     send_json(s,Move)
 
@@ -125,17 +147,18 @@ while True:
             if recu['request'] == "play":
                 print('PLAY')
                 print(f"il reste {recu["lives"]} vie ")
-                iniState = recu['state']['board']
-                headColor = recu['state']['color']
-                print(f"headColor is {headColor}, and type {type(headColor)}")
-                if recu['state']['current'] == 0: # ==name of AI
-                    Pawncolor = 'dark'
-                    print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
-                else:
-                    Pawncolor = 'light'
-                    print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
+                PLAY(recu)
+                # iniState = recu['state']['board']
+                # headColor = recu['state']['color']
+                # print(f"headColor is {headColor}, and type {type(headColor)}")
+                # if recu['state']['current'] == 0:
+                #     Pawncolor = 'dark'
+                #     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
+                # else:
+                #     Pawncolor = 'light'
+                #     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
 
-                FindPawn(headColor,iniState,Pawncolor)
+                
 
     except socket.timeout:
         pass
