@@ -23,29 +23,26 @@ s.send(message)
 print(s.recv(32).decode('utf-8'))   #receive 'ok' to confirm connection with bot_data information
 
 #--------AI---------
-def move(JEF_towerPosition : list, JEF_currentInStateJson : int, forward : bool, Rdiagonal:bool, Ldiagonal : bool) -> list:
+def move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> list:
     currentPosition = [JEF_towerPositionLine, JEF_towerPositionColomn]
-    dx = random.randint(0,7)
-    dy = random.randint(0,7)
+    
     if JEF_currentInStateJson == 0:
-        if forward:
+        if play == 'forward':
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]]
-        if Rdiagonal:
+        if play == 'Rdiagonal':
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]+random.randint(0,currentPosition[1])]
-        if Ldiagonal:
+        if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]-random.randint(0,currentPosition[1])]
 
     elif JEF_currentInStateJson == 1:
-        if forward:
+        if play == 'forward':
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]]
-        if Rdiagonal:
+        if play == 'Rdiagonal':
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]-random.randint(0,7-currentPosition[1])]
-        if Ldiagonal:
+        if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]+random.randint(0,7-currentPosition[1])]
 
     return [currentPosition, finalPosition]
-
-
 
 
 
@@ -74,7 +71,15 @@ while True:
                 client.send(pong_message)   #send pong
                 print(pong_data)
             if "play" in client_message:
+                move_data = {
+                   "response": "move",
+                   "move": move(JEF_towerPosition,JEF_currentInStateJson,random.choice(['forward', 'Rdiagonal', 'Ldiagonal'])),
+                   "message": "Fun message"
+                }
                 print(client_message)
+                move_message = json.dumps(move_data).encode('utf-8')
+                client.send(struct.pack("I", len(move_message)))
+                client.send(move_message)
             
     except socket.timeout:
         pass
