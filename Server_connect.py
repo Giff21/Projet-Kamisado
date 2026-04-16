@@ -41,7 +41,7 @@ def inscription(s):
     inscription_Json ={
         "request": "subscribe",
         "port": 8888,
-        "name": "U+1F624",
+        "name": "apozhjsodntpokqsndpohnqdigznq",
         "matricules": ["24087", "24092"]
     }
     send_json(s,inscription_Json)
@@ -61,7 +61,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('172.20.10.2', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.17.10.46', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
@@ -82,5 +82,6 @@ while True:
                 print("PING")
                 pingRequest(client)
                 print("PONG")
+
     except socket.timeout:
         pass
