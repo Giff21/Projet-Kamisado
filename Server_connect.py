@@ -1,6 +1,7 @@
 import socket
 import json
 import struct
+import random
 
 def send_json(s,data: dict) -> None:  #https://oneuptime.com/blog/post/2026-03-20-json-over-ipv4-sockets-python/view
     """Serialize data to JSON and send with a 4-byte length prefix."""
@@ -53,12 +54,15 @@ def pingRequest(clientSock):
     send_json(clientSock,pong)
     print('ping sent')
 
-def FindPawn(headColor, iniState,Pawncolor) -> list:
+def FindPawn(headColor, iniState,Pawncolor) :
     for i in range(8):
         for j in range(8):
             if iniState[i][j][1] != 'null' :
                 print(iniState[i][j][1])
-                if headColor not in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
+                if headColor == 'null':
+                    a =random.randint(0,8)
+                    return 'start', (8,a)
+                elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
                     print(i,j)
                     pos =[i,j]
                     return pos
@@ -106,13 +110,14 @@ while True:
                 print(f"il reste {recu["lives"]} vie ")
                 iniState = recu['state']['board']
                 headColor = recu['state']['color']
+                print(f"headColor is {headColor}, and type {type(headColor)}")
                 if recu['state']['players'] == "GIGA BYTE  BLYAT": # ==name of AI
                     Pawncolor = 'dark'
-                    print(f"PawnColor is {Pawncolor}, and type type(Pawncolor)")
+                    print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
                 else:
                     Pawncolor = 'light'
                     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
-                    
+
                 FindPawn(Pawncolor,iniState,Pawncolor)
 
     except socket.timeout:
