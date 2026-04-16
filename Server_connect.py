@@ -110,7 +110,11 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> 
 
 def Sendmove(s,the_move_played,name):
     fun_message = [f"{name} did a bold move !", f"{name} just subscribed to my OnlyFans !", f"domain expansion: 'Nah, I'd win ",
-                   f"BOT LOBBY", f"gg ez"]
+                   f"BOT LOBBY", f"gg ez", f"pickle", f"what is {name} even doing -_-", f"when is the competition starting ?",
+                   f"You tried at least", f"BOMBACLAT !", f"Waiter ! waiter ! more {name}'s bad moves !",
+                   f"Am I real ?", f"{name} CPU is burning", f"SMASH, next question", f"{name} just did a 6 7 !", f"No Bitches?",
+                   f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
+                   ,f"Are we done ?"]
     Move ={
    "response": "move",
    "move": the_move_played,
