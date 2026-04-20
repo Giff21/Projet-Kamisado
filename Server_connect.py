@@ -109,12 +109,13 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
     return currentPosition, finalPosition
 
 def Sendmove(s,currentPosition,finalPos,name):
-    fun_message = [f"{name} did a bold move !", f"{name} just subscribed to my OnlyFans !", f"domain expansion: 'Nah, I'd win ",
+    fun_message = [f"{name} did a bold move !", f"{name} just subscribed to my OnlyFans !", f"domain expansion: Nah, I'd win ",
                    f"BOT LOBBY", f"gg ez", f"pickle", f"what is {name} even doing -_-", f"when is the competition starting ?",
                    f"You tried at least", f"BOMBACLAT !", f"Waiter ! waiter ! more {name}'s bad moves !",
                    f"Am I real ?", f"{name} CPU is burning", f"SMASH, next question", f"{name} just did a 6 7 !", f"No Bitches?",
                    f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
-                   ,f"Are we done ?"]
+                   ,f"Are we done ?", f"simply better", f"YOU NOOB",f"Trust me, I'm an engineer", f"Trust me bro",f"go play the tutorial",
+                   f"your mandatory prostate inspection is coming"]
     Fun_message = fun_message[random.randint(0,len(fun_message))]
     Move ={
    "response": "move",
@@ -130,7 +131,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('172.20.10.2', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
