@@ -68,8 +68,8 @@ def PLAY(s,recu):
         ennemi = recu['state']['players'][0]
     
     pawnPos, start = FindPawn(headColor,iniState,Pawncolor)
-    moveToPlay = Move(pawnPos,current,start)
-    Sendmove(s,moveToPlay,ennemi)
+    currentPosition,finalPosition = Move(pawnPos,current,start)
+    Sendmove(s,currentPosition,finalPosition,ennemi)
     
     
 def FindPawn(headColor, iniState,Pawncolor) :
@@ -86,7 +86,7 @@ def FindPawn(headColor, iniState,Pawncolor) :
                     return pos, "going"
     raise ValueError("no Pawn found :(")
 
-def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> list:
+def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
 
     currentPosition = [JEF_towerPosition[0], JEF_towerPosition[1]]
     
@@ -106,9 +106,9 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> 
         if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]+random.randint(0,7-currentPosition[1])]
 
-    return [currentPosition, finalPosition]
+    return currentPosition, finalPosition
 
-def Sendmove(s,the_move_played,name):
+def Sendmove(s,currentPosition,finalPos,name):
     fun_message = [f"{name} did a bold move !", f"{name} just subscribed to my OnlyFans !", f"domain expansion: 'Nah, I'd win ",
                    f"BOT LOBBY", f"gg ez", f"pickle", f"what is {name} even doing -_-", f"when is the competition starting ?",
                    f"You tried at least", f"BOMBACLAT !", f"Waiter ! waiter ! more {name}'s bad moves !",
@@ -118,7 +118,7 @@ def Sendmove(s,the_move_played,name):
     Fun_message = fun_message[random.randint(0,len(fun_message))]
     Move ={
    "response": "move",
-   "move": the_move_played,
+   "move": [[currentPosition],[finalPos]],
    "message": Fun_message
     }
     send_json(s,Move)
@@ -130,7 +130,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('10.0.0.144', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.20.10.2', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
@@ -147,23 +147,14 @@ while True:
         with client:
             recu =recv_json(client)
             print(recu)
-            if recu['request'] == "ping":  #ERROR I just want the word ping 
+            if recu['request'] == "ping":  
                 pingRequest(client)
             if recu['request'] == "play":
                 print('PLAY')
                 print(f"il reste {recu["lives"]} vie ")
                 PLAY(s,recu)
-                # iniState = recu['state']['board']
-                # headColor = recu['state']['color']
-                # print(f"headColor is {headColor}, and type {type(headColor)}")
-                # if recu['state']['current'] == 0:
-                #     Pawncolor = 'dark'
-                #     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
-                # else:
-                #     Pawncolor = 'light'
-                #     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
 
-                
 
+            
     except socket.timeout:
         pass
