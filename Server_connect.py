@@ -68,22 +68,29 @@ def PLAY(s,recu):
         print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
         ennemi = recu['state']['players'][0]
     
-    pawnPos = FindPawn(headColor,iniState,Pawncolor)
+    pawnPos = FindPawn(headColor,iniState,Pawncolor,current)
     currentPosition,finalPosition = Move(pawnPos,current,random.choice(['forward', 'Rdiagonal', 'Ldiagonal']))
     Sendmove(s,currentPosition,finalPosition,ennemi)
     print("MOVE SENT")
     
     
-def FindPawn(headColor, iniState,Pawncolor) :
+def FindPawn(headColor, iniState,Pawncolor,current) :
+    if headColor == None or headColor == 'n':
+                if current == 0:
+                    a =random.randint(0,7)
+                    print(f"[7,{a}]")
+                    return [7,a]
+                elif current == 1:
+                    a = random.randint(0,7)
+                    print(f"[0,{a}]")
+                    return [0,a]
     for i in range(8):
         for j in range(8):
-            if iniState[i][j][1] != None :
-                #print(iniState[i][j][1])
-                if headColor is None:
-                    a =random.randint(0,7)
-                    return [7,a]
-                elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
-                    print(i,j)
+            case = iniState[i][j][1]
+            if isinstance(case, list):
+                color, pawn = case
+                if headColor == color and Pawncolor == pawn :
+                    print(f"[{i},{j}] is {headColor} and {Pawncolor}")
                     pos =[i,j]
                     return pos
     raise ValueError("no Pawn found :(")
