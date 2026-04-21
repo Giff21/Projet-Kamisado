@@ -91,42 +91,54 @@
 # }
 # }
 
-# def FindPawn(headColor: str, iniState:list,pawnColor : str)  : #  str) -> tuple : 
+# # def FindPawn(headColor: str, iniState:list,pawnColor : str)  : #  str) -> tuple : 
+# #     for i in range(8):
+# #         for j in range(8):
+# #             if iniState[i][j][1] != 'null' :
+# #                 #print(iniState[i][j][1])
+# #                 if headColor == 'null':
+# #                     a =random.randint(0,8)
+# #                     return print('start'), print((8,a))
+# #                 elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
+# #                     print(i,j)
+# #                     pos =[i,j+1]
+# #                     return print(pos)
+
+
+# def FindPawn(headColor, iniState,Pawncolor,current) :
 #     for i in range(8):
 #         for j in range(8):
-#             if iniState[i][j][1] != 'null' :
-#                 #print(iniState[i][j][1])
-#                 if headColor == 'null':
-#                     a =random.randint(0,8)
-#                     return print('start'), print((8,a))
-#                 elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
-#                     print(i,j)
-#                     pos =[i,j+1]
-#                     return print(pos)
-
-
-# def Sendmove(s,the_move_played):
-#     Move ={
-#    "response": "move",
-#    "move": the_move_played,
-#    "message": "Fun message"
-#     }
-#     return print(Move)
-
+#             print(iniState[i][j][1][0])
+#             if headColor == None or headColor == 'n':
+#                 if current == 0:
+#                     a =random.randint(0,7)
+#                     print(f"[7,{a}]")
+#                     return [7,a]
+#                 elif current == 1:
+#                     a = random.randint(0,7)
+#                     print(f"[0,{a}]")
+#                     return [0,a]
+#             elif headColor == iniState[i][j][1][0] and Pawncolor == iniState[i][j][1][1] :
+#                 print(f"[{i},{j}] is {headColor} and {Pawncolor}")
+#                 pos =[i,j]
+#                 return pos
+#     raise ValueError("no Pawn found :(")
 
 # print('PLAY')
 # print(f"il reste {recu["lives"]} vie ")
 # iniState = recu['state']['board']
 # headColor = recu['state']['color']
+# current = recu['state']['current']
 # print("current:",recu['state']['current'])
-# print(f"headColor is {headColor}, and type {type(headColor)}")
-# if recu['state']['current'] == 0: # ==name of AI
+# print(f"headColor is {headColor}")
+# if current == 0: # ==name of AI
 #     Pawncolor = 'dark'
-#     print(f"PawnColor is {Pawncolor}, and type type(Pawncolor)")
+#     print(f"PawnColor is {Pawncolor}")
 # else:
 #     Pawncolor = 'light'
-#     print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
-# FindPawn(headColor,iniState,Pawncolor)
+#     print(f"PawnColor is {Pawncolor}")
+
+# FindPawn(headColor,iniState,Pawncolor,current)
 
 # #FindPawn(headColor,iniState,Pawncolor)
 
@@ -205,23 +217,23 @@ def PLAY(s,recu):
     Sendmove(s,currentPosition,finalPosition,ennemi)
     print("MOVE SENT")
     
-    
 def FindPawn(headColor, iniState,Pawncolor,current) :
+    if headColor == None or headColor == 'n':
+                if current == 0:
+                    a =random.randint(0,7)
+                    print(f"[7,{a}]")
+                    return [7,a]
+                elif current == 1:
+                    a = random.randint(0,7)
+                    print(f"[0,{a}]")
+                    return [0,a]
     for i in range(8):
         for j in range(8):
-            #if iniState[i][j][1] != None :
-            #   print("iniState is not none")
-                if headColor == None:
-                    if current == 0:
-                        a =random.randint(0,7)
-                        print(f"[0,{a}]")
-                        return [0,a]
-                    elif current == 1:
-                        a = random.randint(0,7)
-                        print(f"[7,{a}]")
-                        return [7,a]
-                elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
-                    print(f"[i,j] is {headColor} and {Pawncolor}")
+            case = iniState[i][j][1]
+            if isinstance(case, list):
+                color, pawn = case
+                if headColor == color and Pawncolor == pawn :
+                    print(f"[{i},{j}] is {headColor} and {Pawncolor}")
                     pos =[i,j]
                     return pos
     raise ValueError("no Pawn found :(")
@@ -237,6 +249,9 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]+random.randint(0,currentPosition[1])]
         if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]-random.randint(0,currentPosition[1])]
+        
+        if currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
+            finalPosition = [finalPosition[0]-1, finalPosition[1]-1]
 
     elif JEF_currentInStateJson == 1:
         if play == 'forward':
@@ -245,7 +260,11 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]-random.randint(0,7-currentPosition[1])]
         if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]+random.randint(0,7-currentPosition[1])]
+        
+        if currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
+            finalPosition = [finalPosition[0], finalPosition[1]+1]
 
+    print(play,":",currentPosition,",",finalPosition)
     return currentPosition, finalPosition
 
 def Sendmove(s,currentPosition,finalPos,name):
@@ -256,7 +275,6 @@ def Sendmove(s,currentPosition,finalPos,name):
                    f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
                    ,f"Are we done ?"]
 #   Fun_message = fun_message[random.randint(0,len(fun_message))]
-    print(f"[{currentPosition}, {finalPos}]")
     Move ={
    "response": "move",
    "move": [currentPosition,finalPos],
@@ -291,7 +309,8 @@ while True:
             if recu['request'] == "ping":  #ERROR I just want the word ping 
                 pingRequest(client)
             if recu['request'] == "play":
-                print(f"PLAY : il reste {recu["lives"]} vie ")
+                print('######PLAY######')
+                print(f"il reste {recu["lives"]} vie ")
                 PLAY(client,recu)
             
     except socket.timeout:

@@ -61,11 +61,11 @@ def PLAY(s,recu):
     current = recu['state']['current']
     if current == 0:
         Pawncolor = 'dark'
-        print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
+        print(f"PawnColor is {Pawncolor}")
         ennemi = recu['state']['players'][1]
     else:
         Pawncolor = 'light'
-        print(f"PawnColor is {Pawncolor}, and type {type(Pawncolor)}")
+        print(f"PawnColor is {Pawncolor}")
         ennemi = recu['state']['players'][0]
     
     pawnPos = FindPawn(headColor,iniState,Pawncolor,current)
@@ -73,17 +73,16 @@ def PLAY(s,recu):
     Sendmove(s,currentPosition,finalPosition,ennemi)
     print("MOVE SENT")
     
-    
 def FindPawn(headColor, iniState,Pawncolor,current) :
     if headColor == None or headColor == 'n':
-                if current == 0:
-                    a =random.randint(0,7)
-                    print(f"[7,{a}]")
-                    return [7,a]
-                elif current == 1:
-                    a = random.randint(0,7)
-                    print(f"[0,{a}]")
-                    return [0,a]
+        if current == 0:
+            a =random.randint(0,7)
+            print(f"[7,{a}]")
+            return [7,a]
+        else:
+            a = random.randint(0,7)
+            print(f"[0,{a}]")
+            return [0,a]
     for i in range(8):
         for j in range(8):
             case = iniState[i][j][1]
@@ -107,6 +106,9 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
         if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]-random.randint(0,currentPosition[1])]
 
+        if  currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
+            finalPosition = [finalPosition[0]-1, finalPosition[1]-1]
+
     elif JEF_currentInStateJson == 1:
         if play == 'forward':
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]]
@@ -114,7 +116,11 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]-random.randint(0,7-currentPosition[1])]
         if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]+random.randint(0,7-currentPosition[1])]
+        
+        if currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
+            finalPosition = [finalPosition[0]+1, finalPosition[1]+1]
 
+    print(play,":",currentPosition,",",finalPosition)
     return currentPosition, finalPosition
 
 def Sendmove(ls,currentPosition,finalPos,name):
@@ -125,11 +131,11 @@ def Sendmove(ls,currentPosition,finalPos,name):
                    f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
                    ,f"Are we done ?", f"simply better", f"YOU NOOB",f"Trust me, I'm an engineer", f"Trust me bro",f"go play the tutorial",
                    f"your mandatory prostate inspection is coming", f"I am inevitable", f"{name} is a furry"]
-#   Fun_message = fun_message[random.randint(0,len(fun_message))]
+    Fun_message = fun_message[random.randint(0,len(fun_message)-1)]
     Move ={
    "response": "move",
    "move": [currentPosition,finalPos],
-   "message": "Fun_message"
+   "message": Fun_message
     }
     send_json(ls,Move)
 
@@ -156,11 +162,11 @@ while True:
         client, adress = ls.accept()
         with client:
             recu =recv_json(client)
-            print(recu)
+            #print(recu)
             if recu['request'] == "ping":  
                 pingRequest(client)
             if recu['request'] == "play":
-                print('PLAY')
+                print('######PLAY######')
                 print(f"il reste {recu["lives"]} vie ")
                 PLAY(client,recu)
   
