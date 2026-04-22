@@ -1,3 +1,147 @@
+# import random
+# recu ={
+#    "request": "play",
+#    "lives": 3,
+#    "errors": "list_of_errors",
+#    "state":{
+#   "board": [[
+#       ["orange", ["pink", "light"]],
+#       ["blue", ["orange", "light"]],
+#       ["purple", ["green", "light"]],
+#       ["pink", ["red", "light"]],
+#       ["yellow", ["purple", "light"]],
+#       ["red", ["blue", "light"]],
+#       ["green", ["brown", "light"]],
+#       ["brown", ["yellow", "light"]]
+#     ],
+#     [
+#       ["red", "null"],
+#       ["orange", "null"],
+#       ["pink", "null"],
+#       ["green", "null"],
+#       ["blue", "null"],
+#       ["yellow", "null"],
+#       ["brown", "null"],
+#       ["purple", "null"]
+#     ],
+#     [
+#       ["green", "null"],
+#       ["pink", "null"],
+#       ["orange", "null"],
+#       ["red", "null"],
+#       ["purple", "null"],
+#       ["brown", "null"],
+#       ["yellow", "null"],
+#       ["blue", "null"]
+#     ],
+#     [
+#       ["pink", "null"],
+#       ["purple", "null"],
+#       ["blue", "null"],
+#       ["orange", "null"],
+#       ["brown", "null"],
+#       ["green", "null"],
+#       ["red", "null"],
+#       ["yellow", "null"]
+#     ],
+#     [
+#       ["yellow", "null"],
+#       ["red", "null"],
+#       ["green", "null"],
+#       ["brown", "null"],
+#       ["orange", "null"],
+#       ["blue", "null"],
+#       ["purple", "null"],
+#       ["pink", "null"]
+#     ],
+#     [
+#       ["blue", "null"],
+#       ["yellow", "null"],
+#       ["brown", "null"],
+#       ["purple", "null"],
+#       ["red", "null"],
+#       ["orange", "null"],
+#       ["pink", "null"],
+#       ["green", "null"]
+#     ],
+#     [
+#       ["purple", "null"],
+#       ["brown", "null"],
+#       ["yellow", "null"],
+#       ["blue", "null"],
+#       ["green", "null"],
+#       ["pink", "null"],
+#       ["orange", "null"],
+#       ["red", "null"]
+#     ],
+#     [
+#       ["brown", ["yellow", "dark"]],
+#       ["green", ["green", "dark"]],
+#       ["red", ["orange", "dark"]],
+#       ["yellow", ["purple", "dark"]],
+#       ["pink", ["red", "dark"]],
+#       ["purple", ["brown", "dark"]],
+#       ["blue", ["blue", "dark"]],
+#       ["orange", ["pink", "dark"]]
+#     ]
+#   ],
+#   "color": 'red',
+#   "current": 0,
+#   "players": ["LUR", "FKY"]
+# }
+# }
+
+# # def FindPawn(headColor: str, iniState:list,pawnColor : str)  : #  str) -> tuple : 
+# #     for i in range(8):
+# #         for j in range(8):
+# #             if iniState[i][j][1] != 'null' :
+# #                 #print(iniState[i][j][1])
+# #                 if headColor == 'null':
+# #                     a =random.randint(0,8)
+# #                     return print('start'), print((8,a))
+# #                 elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
+# #                     print(i,j)
+# #                     pos =[i,j+1]
+# #                     return print(pos)
+
+
+# def FindPawn(headColor, iniState,Pawncolor,current) :
+#     for i in range(8):
+#         for j in range(8):
+#             print(iniState[i][j][1][0])
+#             if headColor == None or headColor == 'n':
+#                 if current == 0:
+#                     a =random.randint(0,7)
+#                     print(f"[7,{a}]")
+#                     return [7,a]
+#                 elif current == 1:
+#                     a = random.randint(0,7)
+#                     print(f"[0,{a}]")
+#                     return [0,a]
+#             elif headColor == iniState[i][j][1][0] and Pawncolor == iniState[i][j][1][1] :
+#                 print(f"[{i},{j}] is {headColor} and {Pawncolor}")
+#                 pos =[i,j]
+#                 return pos
+#     raise ValueError("no Pawn found :(")
+
+# print('PLAY')
+# print(f"il reste {recu["lives"]} vie ")
+# iniState = recu['state']['board']
+# headColor = recu['state']['color']
+# current = recu['state']['current']
+# print("current:",recu['state']['current'])
+# print(f"headColor is {headColor}")
+# if current == 0: # ==name of AI
+#     Pawncolor = 'dark'
+#     print(f"PawnColor is {Pawncolor}")
+# else:
+#     Pawncolor = 'light'
+#     print(f"PawnColor is {Pawncolor}")
+
+# FindPawn(headColor,iniState,Pawncolor,current)
+
+# #FindPawn(headColor,iniState,Pawncolor)
+
 import socket
 import json
 import struct
@@ -40,9 +184,9 @@ def recvn(s:socket.socket, n: int) -> bytes:
 def inscription(s):
     inscription_Json ={
         "request": "subscribe",
-        "port": 8888,
-        "name": "Biberon et Au lit",
-        "matricules": ["24087", "24092"]
+        "port": 8887,
+        "name": "Maelle",
+        "matricules": ["00000", "22222"]
     }
     send_json(s,inscription_Json)
     print("insciption sent")
@@ -75,14 +219,14 @@ def PLAY(s,recu):
     
 def FindPawn(headColor, iniState,Pawncolor,current) :
     if headColor == None or headColor == 'n':
-        if current == 0:
-            a =random.randint(0,7)
-            print(f"[7,{a}]")
-            return [7,a]
-        else:
-            a = random.randint(0,7)
-            print(f"[0,{a}]")
-            return [0,a]
+                if current == 0:
+                    a =random.randint(0,7)
+                    print(f"[7,{a}]")
+                    return [7,a]
+                elif current == 1:
+                    a = random.randint(0,7)
+                    print(f"[0,{a}]")
+                    return [0,a]
     for i in range(8):
         for j in range(8):
             case = iniState[i][j][1]
@@ -105,8 +249,8 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]+random.randint(0,currentPosition[1])]
         if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]-random.randint(0,currentPosition[1])]
-
-        if  currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
+        
+        if currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
             finalPosition = [finalPosition[0]-1, finalPosition[1]-1]
 
     elif JEF_currentInStateJson == 1:
@@ -118,32 +262,31 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
             finalPosition = [currentPosition[0]+random.randint(0,7-currentPosition[0]), currentPosition[1]+random.randint(0,7-currentPosition[1])]
         
         if currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
-            finalPosition = [finalPosition[0]+1, finalPosition[1]+1]
+            finalPosition = [finalPosition[0], finalPosition[1]+1]
 
     print(play,":",currentPosition,",",finalPosition)
     return currentPosition, finalPosition
 
-def Sendmove(ls,currentPosition,finalPos,name):
-    fun_message = [f"{name} did a bold move !", f"{name} just subscribed to my OnlyFans !", f"domain expansion: Nah, I'd win ",
+def Sendmove(s,currentPosition,finalPos,name):
+    fun_message = [f"{name} did a bold move !", f"{name} just subscribed to my OnlyFans !", f"domain expansion: 'Nah, I'd win ",
                    f"BOT LOBBY", f"gg ez", f"pickle", f"what is {name} even doing -_-", f"when is the competition starting ?",
                    f"You tried at least", f"BOMBACLAT !", f"Waiter ! waiter ! more {name}'s bad moves !",
                    f"Am I real ?", f"{name} CPU is burning", f"SMASH, next question", f"{name} just did a 6 7 !", f"No Bitches?",
                    f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
-                   ,f"Are we done ?", f"simply better", f"YOU NOOB",f"Trust me, I'm an engineer", f"Trust me bro",f"go play the tutorial",
-                   f"your mandatory prostate inspection is coming", f"I am inevitable", f"{name} is a furry"]
-    Fun_message = fun_message[random.randint(0,len(fun_message)-1)]
+                   ,f"Are we done ?"]
+#   Fun_message = fun_message[random.randint(0,len(fun_message))]
     Move ={
    "response": "move",
    "move": [currentPosition,finalPos],
-   "message": Fun_message
+   "message": "Fun_message"
     }
-    send_json(ls,Move)
+    send_json(s,Move)
 
 #############################################
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket()
 ls = socket.socket()
-ls.bind(("0.0.0.0",8888))
+ls.bind(("0.0.0.0",8887))
 
 try:
     address = ('172.17.10.35', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
@@ -163,12 +306,12 @@ while True:
         with client:
             recu =recv_json(client)
             #print(recu)
-            if recu['request'] == "ping":  
+            if recu['request'] == "ping":  #ERROR I just want the word ping 
                 pingRequest(client)
             if recu['request'] == "play":
                 print('######PLAY######')
                 print(f"il reste {recu["lives"]} vie ")
                 PLAY(client,recu)
-  
+            
     except socket.timeout:
         pass
