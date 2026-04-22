@@ -2,6 +2,7 @@ import socket
 import json
 import struct
 import random
+from AI_main import move
 
 
 def inscription( AIname: str, matricule: list[int,int], servIPadress: str, clientPort=8888, serverPort=3000):
@@ -53,6 +54,9 @@ def moveMessage(boardState: dict) -> json:
 
     return json.dumps(move_data).encode('utf-8')
 
+def gameState(boardState):
+    return boardState
+
 
 def serverCom(clientPort=8888):
     """Return nothing
@@ -81,6 +85,7 @@ def serverCom(clientPort=8888):
 
                     elif client_message_dict["request"] == "play":
                         boardState = client_message_dict["state"]
+                        gameState(boardState)
                         client.send(struct.pack("I", len(moveMessage(boardState))))
                         client.send(moveMessage(boardState)) #sould send the move
                         
