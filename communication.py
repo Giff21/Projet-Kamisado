@@ -3,6 +3,7 @@ import json
 import struct
 import random
 from AI_move import move
+from Pawn_finder import FindPawn
 
 
 def inscription( AIname: str, matricule: list[int,int], servIPadress: str, clientPort=8888, serverPort=3000):
@@ -43,6 +44,7 @@ def moveMessage(boardState: dict) -> json:
     descr : take board use the move function to find a moveToPlay and construct the tamplate to send
     """
 
+    FindPawn(boardState)
     moveToPlay = move(boardState)
     fun_message = random.choice(["subscribed to my OnlyFans !", "you're ass!"])
 
@@ -54,14 +56,12 @@ def moveMessage(boardState: dict) -> json:
 
     return json.dumps(move_data).encode('utf-8')
 
-def gameState(boardState):
-    return boardState
-
 
 def serverCom(clientPort=8888):
     """Return nothing
 
     descr : communicate with the server - send pong if ping recieved then, take the board state and send the move
+    must do : desactivate 2 fire-wall in par feu windows defender do receive massages
     
     """
     with socket.socket() as ls:
@@ -85,7 +85,6 @@ def serverCom(clientPort=8888):
 
                     elif client_message_dict["request"] == "play":
                         boardState = client_message_dict["state"]
-                        gameState(boardState)
                         client.send(struct.pack("I", len(moveMessage(boardState))))
                         client.send(moveMessage(boardState)) #sould send the move
                         
