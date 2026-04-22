@@ -1,6 +1,7 @@
 import socket
 import json
 import struct
+import random
 
 
 def inscription( AIname: str, matricule: list[int,int], servIPadress: str, clientPort=8888, serverPort=3000):
@@ -42,11 +43,12 @@ def moveMessage(boardState: dict) -> json:
     """
 
     moveToPlay = move(boardState)
+    fun_message = random.choice(["subscribed to my OnlyFans !", "you're ass!"])
 
     move_data = {
     "response": "move",
-    "move": moveToPlay,
-    "message": "Fun message"
+    "move": moveToPlay, #must be [[1,2],[3,4]]
+    "message": fun_message
     }
 
     return json.dumps(move_data).encode('utf-8')
