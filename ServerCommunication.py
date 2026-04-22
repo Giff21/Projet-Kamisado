@@ -23,7 +23,20 @@ s.send(message)
 print(s.recv(32).decode('utf-8'))   #receive 'ok' to confirm connection with bot_data information
 
 #--------AI---------
-def move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str) -> list:
+
+def FindPawn(headColor, iniState,Pawncolor) :
+    for i in range(8):
+        for j in range(8):
+            if iniState[i][j][1] != None :
+                print(iniState[i][j][1])
+                if headColor is None:
+                    a =random.randint(0,7)
+                    return 'start', [7,a]
+                elif headColor in  iniState[i][j][1][0] and Pawncolor in  iniState[i][j][1][1] :
+                    pos =[i,j]
+                    return pos
+
+def move(: list, recu['state']['current'] : int, play : str) -> list:
     currentPosition = [JEF_towerPositionLine, JEF_towerPositionColomn]
     
     if JEF_currentInStateJson == 0:
@@ -71,12 +84,21 @@ while True:
                 client.send(pong_message)   #send pong
                 print(pong_data)
             if "play" in client_message:
+                recu = json.dumps(pong_data).encode('utf-8')
+                iniState = recu['state']['board']
+                headColor = recu['state']['color']
+                if recu['state']['current'] == 0: # ==name of AI
+                    Pawncolor = 'dark'
+                else:
+                    Pawncolor = 'light'
+                
                 move_data = {
                    "response": "move",
                    "move": move(JEF_towerPosition,JEF_currentInStateJson,random.choice(['forward', 'Rdiagonal', 'Ldiagonal'])),
                    "message": "Fun message"
                 }
                 print(client_message)
+
                 move_message = json.dumps(move_data).encode('utf-8')
                 client.send(struct.pack("I", len(move_message)))
                 client.send(move_message)
