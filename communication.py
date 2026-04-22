@@ -2,7 +2,7 @@ import socket
 import json
 import struct
 import random
-from AI_main import move
+from AI_move import move
 
 
 def inscription( AIname: str, matricule: list[int,int], servIPadress: str, clientPort=8888, serverPort=3000):
@@ -64,7 +64,7 @@ def serverCom(clientPort=8888):
     descr : communicate with the server - send pong if ping recieved then, take the board state and send the move
     
     """
-    with socket.socket as ls:
+    with socket.socket() as ls:
         ls.bind(('0.0.0.0', clientPort))
         ls.listen()
         ls.settimeout(0.5)
