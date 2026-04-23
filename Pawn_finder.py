@@ -10,25 +10,25 @@ def FindPawn(boardState) -> list:
     lightPawn = []
     iniState = boardState['board']
     headColor = boardState['color']
-    print(headColor)
+    #print(headColor)
     current = Find_current(boardState)
     if current == 0:
         Pawncolor = 'dark'
-        print(Pawncolor)
+        #print(Pawncolor)
         ennemi = boardState['players'][1]
     else:
         Pawncolor = 'light'
-        print(Pawncolor)
+        #print(Pawncolor)
         ennemi = boardState['players'][0]
 
     if headColor == None or headColor == 'n':
         if current == 0:
             a =random.randint(0,7)
-            print(f"[7,{a}]")
+            #print(f"[7,{a}]")
             pos =[7,a]
         else:
             a = random.randint(0,7)
-            print(f"[0,{a}]")
+            #print(f"[0,{a}]")
             pos =[0,a]
         
     for i in range(8):
@@ -37,7 +37,7 @@ def FindPawn(boardState) -> list:
             if isinstance(case, list):
                 color, pawn = case
                 if headColor == color and Pawncolor == pawn :
-                    print(f"[{i},{j}] is {headColor} and {Pawncolor}")
+                    #print(f"[{i},{j}] is {headColor} and {Pawncolor}")
                     pos =[i,j]
                 if pawn == 'dark':
                     darkPawn.append([i,j])
