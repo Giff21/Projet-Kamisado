@@ -44,7 +44,7 @@ def moveMessage(boardState: dict) -> json:
     agr : dict of the board state
     descr : take board use the move function to find a moveToPlay and construct the tamplate to send
     """
-
+    
     PossibleMove(boardState)
     FindPawn(boardState)
     moveToPlay = move(boardState)
@@ -68,31 +68,36 @@ def serverCom(clientPort=8888):
     """
     with socket.socket() as ls:
         ls.bind(('0.0.0.0', clientPort))
+        #print(f"listen on {clientPort}")
         ls.listen()
         ls.settimeout(0.5)
         while True:
             try:
                 client, address = ls.accept()
+                print(f"connection from {address}")
                 with client:
                     len_info = client.recv(4)
                     len_mes = struct.unpack("I", len_info)[0]
-                    client_message = client.recv(len_mes).decode('utf-8')  #sould receive ping
+                    message = client.recv(len_mes) #sould receive ping
+                    while len(message) < len_mes:
+                        message += client.recv(len_mes - len(message))
+                    client_message = message.decode('utf-8')
+                    
                     client_message_dict = json.loads(client_message)
-                    print(client_message_dict)
+                    #print(client_message_dict)
 
                     if client_message_dict["request"] == "ping":
                         client.send(struct.pack("I", len(pongMessage())))
                         client.send(pongMessage()) #sould send pong
-                        print(json.loads(pongMessage()))
+                        #print(json.loads(pongMessage()))
 
                     elif client_message_dict["request"] == "play":
                         boardState = client_message_dict["state"]
-                        client.send(struct.pack("I", len(moveMessage(boardState))))
-                        client.send(moveMessage(boardState)) #sould send the move
-                        
-                        if client_message_dict["errors"] != "":
-                            print(client_message_dict["errors"])
-                client.close()
+                        mm = moveMessage(boardState)
+                        client.send(struct.pack("I", len(mm)))
+                        client.send(mm) #sould send the move
+                        print(client_message_dict["errors"])
+
 
             except socket.timeout:
                 pass
