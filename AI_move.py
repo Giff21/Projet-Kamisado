@@ -7,42 +7,47 @@ from Pawn_finder import FindPawn
 from Pawn_finder import Find_current
 
 
-
-
-
 def PossibleMove(boardState):
     """Return [finale raw, final column]
 
     descr : tell a direction to this function and will give you all tha available move
     
     """
-    currentRow = FindPawn(boardState)[2][0]
-    currentColumn = FindPawn(boardState)[2][1]
-    direction = random.choice(["forward", "Rdiagonal", "Ldiagonal"])
+    dark, light, Pawn = FindPawn(boardState)
+    PawnRow = Pawn[0]
+    PawnColumn = Pawn[1]
+    print(f'position pion:{Pawn}')
+    player = Find_current(boardState)
+    tower_position = dark + light #coo of all towers
+    #print(tower_position)
+    possible_move =[]
 
-    tower_position = FindPawn(boardState)[0] + FindPawn(boardState)[1]
+    if player == 0:
+        directions = [[-1,0], [-1,1], [-1,-1]]
+    else:
+        directions = [[1,0], [1,-1], [1,1]]
 
+    for Drows, Dcolumn in directions:
+        currentRow = PawnRow + Drows
+        currentColumn = PawnColumn + Dcolumn
 
-    if Find_current(boardState) == 0:
-        if direction == 'forward':
-            finalPosition = [currentRow-1, currentColumn]
-        if direction == 'Rdiagonal':
-            finalPosition = [currentRow-1, currentColumn+1]
-        if direction == 'Ldiagonal':
-            finalPosition = [currentRow-1, currentColumn-1]
+        while 0 <= currentRow < 8 and 0 <= currentColumn < 8:
+            if [currentRow, currentColumn] in tower_position:
+                break
+            
+            possible_move.append([currentRow, currentColumn])
+            currentRow += Drows
+            currentColumn += Dcolumn
 
-    elif Find_current(boardState) == 1:
-        if direction == 'forward':
-            finalPosition = [currentRow+1, currentColumn]
-        if direction == 'Rdiagonal':
-            finalPosition = [currentRow+1, currentColumn-1]
-        if direction == 'Ldiagonal':
-            finalPosition = [currentRow+1, currentColumn+1]
+    if not possible_move:
+        return print("PAS DE MOVE POSSIBLE")
 
-    return finalPosition
+    return random.choice(possible_move)
+
 
 def Minamax() -> list:
     pass
+
 
 def move(boardState) -> list:
     
