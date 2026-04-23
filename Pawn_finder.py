@@ -6,27 +6,30 @@ import random
 #3)later give me the color of the ennemis to pervent Flo to tell our pawn to go on the color that will get the will to the ennemi
 
 def FindPawn(boardState) -> list:
-    playerPawn = []
-    ennemiPawn = []
+    darkPawn = []
+    lightPawn = []
     iniState = boardState['board']
     headColor = boardState['color']
+    print(headColor)
     current = Find_current(boardState)
     if current == 0:
         Pawncolor = 'dark'
+        print(Pawncolor)
         ennemi = boardState['players'][1]
     else:
         Pawncolor = 'light'
+        print(Pawncolor)
         ennemi = boardState['players'][0]
 
     if headColor == None or headColor == 'n':
         if current == 0:
             a =random.randint(0,7)
             print(f"[7,{a}]")
-            return [7,a]
+            pos =[7,a]
         else:
             a = random.randint(0,7)
             print(f"[0,{a}]")
-            return [0,a]
+            pos =[0,a]
         
     for i in range(8):
         for j in range(8):
@@ -36,16 +39,13 @@ def FindPawn(boardState) -> list:
                 if headColor == color and Pawncolor == pawn :
                     print(f"[{i},{j}] is {headColor} and {Pawncolor}")
                     pos =[i,j]
-                if Pawncolor == pawn:
-                    playerPawn.append(iniState[i][j])
-                if Pawncolor != pawn and Pawncolor != 'n':
-                    ennemiPawn.append(iniState[i][j])
-
+                if pawn == 'dark':
+                    darkPawn.append([i,j])
+                if pawn == 'light':
+                    lightPawn.append([i,j])
+             
+    return [darkPawn,lightPawn,pos]
                 
-    return pos
-                
-    raise ValueError("no Pawn found :(")
-
 def Find_current(boardState):
     current = boardState['current']
     return current
