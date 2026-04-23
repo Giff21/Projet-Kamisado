@@ -4,6 +4,7 @@ import struct
 import random
 from AI_move import move
 from Pawn_finder import FindPawn
+from AI_move import PossibleMove
 
 
 def inscription( AIname: str, matricule: list[int,int], servIPadress: str, clientPort=8888, serverPort=3000):
@@ -44,6 +45,7 @@ def moveMessage(boardState: dict) -> json:
     descr : take board use the move function to find a moveToPlay and construct the tamplate to send
     """
 
+    PossibleMove(boardState)
     FindPawn(boardState)
     moveToPlay = move(boardState)
     fun_message = random.choice(["subscribed to my OnlyFans !", "you're ass!"])
