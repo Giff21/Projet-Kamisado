@@ -41,7 +41,7 @@ def inscription(s):
     inscription_Json ={
         "request": "subscribe",
         "port": 8888,
-        "name": "Biberon et Au lit",
+        "name": "MR BAD MOVE",
         "matricules": ["24087", "24092"]
     }
     send_json(s,inscription_Json)
@@ -74,6 +74,8 @@ def PLAY(s,recu):
     print("MOVE SENT")
     
 def FindPawn(headColor, iniState,Pawncolor,current) :
+    darkPawn=[]
+    lightPawn=[]
     if headColor == None or headColor == 'n':
         if current == 0:
             a =random.randint(0,7)
@@ -91,7 +93,13 @@ def FindPawn(headColor, iniState,Pawncolor,current) :
                 if headColor == color and Pawncolor == pawn :
                     print(f"[{i},{j}] is {headColor} and {Pawncolor}")
                     pos =[i,j]
-                    return pos
+                    
+                if pawn == 'dark':
+                    darkPawn.append([i,j])
+                if pawn == 'light':
+                    lightPawn.append([i,j])
+             
+    return [darkPawn,lightPawn,pos]
     raise ValueError("no Pawn found :(")
 
 def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
@@ -130,7 +138,7 @@ def Sendmove(ls,currentPosition,finalPos,name):
                    f"Am I real ?", f"{name} CPU is burning", f"SMASH, next question", f"{name} just did a 6 7 !", f"No Bitches?",
                    f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
                    ,f"Are we done ?", f"simply better", f"YOU NOOB",f"Trust me, I'm an engineer", f"Trust me bro",f"go play the tutorial",
-                   f"your mandatory prostate inspection is coming", f"I am inevitable", f"{name} is a furry"]
+                   f"your mandatory prostate inspection is coming", f"I am inevitable", f"{name} is a furry", f"My name is jefff"]
 
     Fun_message = random.choice(fun_message)
     Move ={
