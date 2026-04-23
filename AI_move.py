@@ -6,36 +6,38 @@ import random
 from Pawn_finder import FindPawn
 from Pawn_finder import Find_current
 
-def rules():
-    tower_position = [] #list with position af all tawer -> do not go
-    pass
 
 
 
-def PossibleMove(boardState, direction):
+
+def PossibleMove(boardState):
     """Return [finale raw, final column]
 
     descr : tell a direction to this function and will give you all tha available move
     
     """
-    currentRow = FindPawn(boardState)[0]
-    currentColumn = FindPawn(boardState)[1]
+    currentRow = FindPawn(boardState)[2][0]
+    currentColumn = FindPawn(boardState)[2][1]
+    direction = random.choice(["forward", "Rdiagonal", "Ldiagonal"])
+
+    tower_position = FindPawn(boardState)[0] + FindPawn(boardState)[1]
+
 
     if Find_current(boardState) == 0:
         if direction == 'forward':
-            finalPosition = [currentRow-random.randint(0,currentRow), currentColumn]
+            finalPosition = [currentRow-1, currentColumn]
         if direction == 'Rdiagonal':
-            finalPosition = [currentRow-random.randint(0,currentRow), currentColumn+random.randint(0,currentColumn)]
+            finalPosition = [currentRow-1, currentColumn+1]
         if direction == 'Ldiagonal':
-            finalPosition = [currentRow-random.randint(0,currentRow), currentColumn-random.randint(0,currentColumn)]
+            finalPosition = [currentRow-1, currentColumn-1]
 
     elif Find_current(boardState) == 1:
         if direction == 'forward':
-            finalPosition = [currentRow+random.randint(0,7-currentRow), currentColumn]
+            finalPosition = [currentRow+1, currentColumn]
         if direction == 'Rdiagonal':
-            finalPosition = [currentRow+random.randint(0,7-currentRow), currentColumn-random.randint(0,7-currentColumn)]
+            finalPosition = [currentRow+1, currentColumn-1]
         if direction == 'Ldiagonal':
-            finalPosition = [currentRow+random.randint(0,7-currentRow), currentColumn+random.randint(0,7-currentColumn)]
+            finalPosition = [currentRow+1, currentColumn+1]
 
     return finalPosition
 
@@ -43,6 +45,8 @@ def Minamax() -> list:
     pass
 
 def move(boardState) -> list:
-    direction = random.choice(["forward", "Rdiagonal", "Ldiagonal"])
-    Minamax(PossibleMove(boardState))
-    return [FindPawn, PossibleMove(boardState, direction)]
+    
+    #Minamax(PossibleMove(boardState))
+    return [FindPawn(boardState)[2], PossibleMove(boardState)]
+
+
