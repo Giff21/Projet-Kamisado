@@ -3,8 +3,9 @@ import json
 import struct
 import random
 from AI_move import move
-from Pawn_finder import FindPawn
+from Pawn_finder import FindPawn    #don't use anymore
 from AI_move import PossibleMove
+from Pawn_finder2 import FindPawn2
 
 
 def inscription( AIname: str, matricule: list[int,int], servIPadress: str, clientPort=8888, serverPort=3000):
@@ -42,11 +43,11 @@ def moveMessage(boardState: dict) -> json:
     """Return the encoded json with the move to do
 
     agr : dict of the board state
+    
     descr : take board use the move function to find a moveToPlay and construct the tamplate to send
     """
-    
-    PossibleMove(boardState)
-    FindPawn(boardState)
+    dark, light, pawn, player = FindPawn2(boardState)
+    PossibleMove(dark, light, pawn, player)
     moveToPlay = move(boardState)
     fun_message = random.choice(["subscribed to my OnlyFans !", "you're ass!"])
 
@@ -96,6 +97,8 @@ def serverCom(clientPort=8888):
                         mm = moveMessage(boardState)
                         client.send(struct.pack("I", len(mm)))
                         client.send(mm) #sould send the move
+                        for error in client_message_dict["errors"]:
+                            error.pop("state", None)
                         print(client_message_dict["errors"])
 
 
