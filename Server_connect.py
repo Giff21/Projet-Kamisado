@@ -68,7 +68,7 @@ def PLAY(s,recu):
         print(f"PawnColor is {Pawncolor}")
         ennemi = recu['state']['players'][0]
     
-    pawnPos = FindPawn(headColor,iniState,Pawncolor,current)
+    pawnPos = FindPawn(headColor,iniState,Pawncolor,current)[2]
     currentPosition,finalPosition = Move(pawnPos,current,random.choice(['forward', 'Rdiagonal', 'Ldiagonal']))
     Sendmove(s,currentPosition,finalPosition,ennemi)
     print("MOVE SENT")
@@ -80,11 +80,11 @@ def FindPawn(headColor, iniState,Pawncolor,current) :
         if current == 0:
             a =random.randint(0,7)
             print(f"[7,{a}]")
-            return [7,a]
+            pos = [7,a]
         else:
             a = random.randint(0,7)
             print(f"[0,{a}]")
-            return [0,a]
+            pos = [0,a]
     for i in range(8):
         for j in range(8):
             case = iniState[i][j][1]
@@ -113,9 +113,9 @@ def Move(JEF_towerPosition : list, JEF_currentInStateJson : int, play : str):
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]+random.randint(0,currentPosition[1])]
         if play == 'Ldiagonal':
             finalPosition = [currentPosition[0]-random.randint(0,currentPosition[0]), currentPosition[1]-random.randint(0,currentPosition[1])]
-
+        
         if  currentPosition[0] == finalPosition[0] or currentPosition[1] == finalPosition[1]:
-            finalPosition = [finalPosition[0]-1, finalPosition[1]-1]
+            finalPosition = [finalPosition[0]-1, finalPosition[1]]
 
     elif JEF_currentInStateJson == 1:
         if play == 'forward':
@@ -155,7 +155,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('172.17.10.125', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.17.10.54', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
@@ -176,6 +176,7 @@ while True:
                 pingRequest(client)
             if recu['request'] == "play":
                 print('######PLAY######')
+                print('error:',recu['errors'])
                 print(f"il reste {recu["lives"]} vie ")
                 PLAY(client,recu)
   
