@@ -3,21 +3,25 @@
 #3)put in common [[initial_rows, initial_column], [final_rows, final_column]]
 #4)find the best move from the available tiles: the closest to the ennemi end without giving the win in the next round -> return a list [final_rows, final_column]
 import random
-from Pawn_finder import FindPawn
-from Pawn_finder import Find_current
+from Pawn_finder import FindPawn    #don't use anymore
+from Pawn_finder import Find_current    #don't use anymore
+from Pawn_finder2 import FindPawn2
 
 
-def PossibleMove(boardState):
+def PossibleMove(dark, light, pawn, player):
     """Return [finale raw, final column]
+    args :  dark : list of dark pawn positions
+            light : list of light pawn positions
+            pawn : position of the pawn we need to move
+            player : we are 0 (dark) or 1 (light)
 
     descr : tell a direction to this function and will give you all tha available move
     
     """
-    dark, light, Pawn = FindPawn(boardState)
-    PawnRow = Pawn[0]
-    PawnColumn = Pawn[1]
-    print(f'position pion:{Pawn}')
-    player = Find_current(boardState)
+
+    PawnRow = pawn[0]
+    PawnColumn = pawn[1]
+    print(f'position pion:{pawn}')
     tower_position = dark + light #coo of all towers
     #print(tower_position)
     possible_move =[]
@@ -40,9 +44,10 @@ def PossibleMove(boardState):
             currentColumn += Dcolumn
 
     if not possible_move:
-        return print("PAS DE MOVE POSSIBLE")
+        print("PAS DE MOVE POSSIBLE")
+        return [pawn, pawn]
 
-    return random.choice(possible_move)
+    return possible_move
 
 
 def Minamax() -> list:
@@ -50,8 +55,17 @@ def Minamax() -> list:
 
 
 def move(boardState) -> list:
+    """Return [[initRow, initCol],[finalRow, finalCOl]]
+
+    descr : take the board inforamtion from FindPawn2 give it to possibleMove that find a final pawn tile
     
-    #Minamax(PossibleMove(boardState))
-    return [FindPawn(boardState)[2], PossibleMove(boardState)]
+    """
+    dark, light, pawn, player = FindPawn2(boardState)
+    list_move = PossibleMove(dark, light, pawn, player)
+    final_move = random.choice(list_move)
+
+    print(f'position finale:{final_move}')
+
+    return [pawn, final_move]
 
 
