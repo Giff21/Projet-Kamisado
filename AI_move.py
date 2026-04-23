@@ -6,7 +6,18 @@ import random
 from Pawn_finder import FindPawn
 from Pawn_finder import Find_current
 
+def rules():
+    tower_position = [] #list with position af all tawer -> do not go
+    pass
+
+
+
 def PossibleMove(boardState, direction):
+    """Return [finale raw, final column]
+
+    descr : tell a direction to this function and will give you all tha available move
+    
+    """
     currentRow = FindPawn(boardState)[0]
     currentColumn = FindPawn(boardState)[1]
 
