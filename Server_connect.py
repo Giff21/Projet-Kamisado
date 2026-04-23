@@ -131,7 +131,8 @@ def Sendmove(ls,currentPosition,finalPos,name):
                    f"{name} plays LoL everyday", f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)",f"+1 for the funny message ? ;)"
                    ,f"Are we done ?", f"simply better", f"YOU NOOB",f"Trust me, I'm an engineer", f"Trust me bro",f"go play the tutorial",
                    f"your mandatory prostate inspection is coming", f"I am inevitable", f"{name} is a furry"]
-    Fun_message = fun_message[random.randint(0,len(fun_message)-1)]
+
+    Fun_message = random.choice(fun_message)
     Move ={
    "response": "move",
    "move": [currentPosition,finalPos],
@@ -146,7 +147,7 @@ ls = socket.socket()
 ls.bind(("0.0.0.0",8888))
 
 try:
-    address = ('172.17.10.35', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
+    address = ('172.17.10.125', 3000) # 172.17.10.41 addr serv lur port 3000  par défaut
     s.connect(address) 
     print(f"connected to {address}")
 except OSError :
