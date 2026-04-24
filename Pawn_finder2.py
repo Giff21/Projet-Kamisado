@@ -16,9 +16,9 @@ def FindPawn2(boardState) -> list:
     chosen_pos = None
 
     if current == 0:
-        my_side = 'dark'
+        Pawncolor = 'dark'
     else:
-        my_side = 'light'
+        Pawncolor = 'light'
 
     for i in range(8):
         for j in range(8):
@@ -29,15 +29,11 @@ def FindPawn2(boardState) -> list:
                     darkPawn.append([i,j])
                 else:
                     lightPawn.append([i,j])
-                if headColor and piece_color == headColor and pawn_side == my_side:
+                if headColor == piece_color and Pawncolor == pawn_side :
                     chosen_pos = [i, j]
     #for the first pawn
-    if headColor is None or headColor == 'n':
+    if headColor is None:
         candidates = darkPawn 
-        if my_side == 'dark':
-            candidates = darkPawn
-        else :
-            candidates = lightPawn
         chosen_pos = random.choice(candidates)
 
     return darkPawn, lightPawn, chosen_pos, current
