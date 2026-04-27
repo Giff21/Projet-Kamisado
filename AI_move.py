@@ -3,8 +3,6 @@
 #3)put in common [[initial_rows, initial_column], [final_rows, final_column]]
 #4)find the best move from the available tiles: the closest to the ennemi end without giving the win in the next round -> return a list [final_rows, final_column]
 import random
-from Pawn_finder import FindPawn    #don't use anymore
-from Pawn_finder import Find_current    #don't use anymore
 from Pawn_finder2 import FindPawn2
 
 
