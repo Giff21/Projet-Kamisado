@@ -2,74 +2,85 @@ import socket
 import json
 import struct
 import random
-from AI_move import move
-from Pawn_finder import FindPawn    #don't use anymore
-from AI_move import PossibleMove
-from Pawn_finder2 import FindPawn2
+from ai_move import move
 
 
-def inscription( AIname: str, matricule: list[int,int], servIPadress: str, clientPort=8888, serverPort=3000):
-    """Return nothing
-    descr : register our info to the game server
+def inscription(
+    AIname: str,
+    matricule: list[int, int],
+    servIPadress: str,
+    clientPort=8888,
+    serverPort=3000,
+) -> None:
+    """register our info to the game server
+
+    Args:
+        AIname (str): name of the AI
+        matricule (list[int, int]): list of the number of 5 digits
+        servIPadress (str): IP adress of the server we want to play in
+        clientPort (int, optional): client communication free port. Defaults to 8888.
+        serverPort (int, optional): server port. Defaults to 3000.
     """
 
     inscription_data = {
-    "request": "subscribe",
-    "port": clientPort,
-    "name": AIname,
-    "matricules": [matricule[0], matricule[1]]
+        "request": "subscribe",
+        "port": clientPort,
+        "name": AIname,
+        "matricules": [matricule[0], matricule[1]],
     }
-
+    # send inscription info to the server, tell the server to communicate with clientPort
     with socket.socket() as s:
         s.connect((servIPadress, serverPort))
-        message = json.dumps(inscription_data).encode('utf-8')
+        message = json.dumps(inscription_data).encode("utf-8")
         s.send(struct.pack("I", len(message)))
         s.send(message)
-        response = s.recv(32).decode('utf-8')
-        print(response) #should recieve 'OK' form the server
+        response = s.recv(32).decode("utf-8")
+        print(response)  # should recieve 'OK' form the server
 
 
-def pongMessage() -> json:
-    """Return the encoded json with "pong" """
+def pong_message() -> json:
+    """pong massage
 
-    pong_data = {
-    "response": "pong"
-    }
-
-    return json.dumps(pong_data).encode('utf-8')
-
-
-def moveMessage(boardState: dict) -> json:
-    """Return the encoded json with the move to do
-
-    agr : dict of the board state
-    
-    descr : take board use the move function to find a moveToPlay and construct the tamplate to send
+    Returns:
+        json: encoded json with pong massage
     """
-    dark, light, pawn, player = FindPawn2(boardState)
-    PossibleMove(dark, light, pawn, player)
-    moveToPlay = move(boardState)
+
+    pong_data = {"response": "pong"}
+
+    return json.dumps(pong_data).encode("utf-8")
+
+
+def move_message(boardState: dict) -> json:
+    """use the board and move function to construct the tamplate to send
+
+    Args:
+        boardState (dict): current state of the game
+
+    Returns:
+        json: encoded json with move message
+    """
+
+    move_to_play = move(boardState)
     fun_message = random.choice(["subscribed to my OnlyFans !", "you're ass!"])
 
     move_data = {
-    "response": "move",
-    "move": moveToPlay, #must be [[1,2],[3,4]]
-    "message": fun_message
+        "response": "move",
+        "move": move_to_play,  # must be [[1,2],[3,4]]
+        "message": fun_message,
     }
 
-    return json.dumps(move_data).encode('utf-8')
+    return json.dumps(move_data).encode("utf-8")
 
 
-def serverCom(clientPort=8888):
-    """Return nothing
+def server_communication(clientPort=8888) -> None:
+    """communicate with the server, send pong if ping request and send the move. Must desactivate 2 fire-wall in "par feu windows defender" do receive massages
 
-    descr : communicate with the server - send pong if ping recieved then, take the board state and send the move
-    must do : desactivate 2 fire-wall in par feu windows defender do receive massages
-    
+    Args:
+        clientPort (int, optional): client communication free port. Defaults to 8888.
     """
+
     with socket.socket() as ls:
-        ls.bind(('0.0.0.0', clientPort))
-        #print(f"listen on {clientPort}")
+        ls.bind(("0.0.0.0", clientPort))
         ls.listen()
         ls.settimeout(0.5)
         while True:
@@ -77,30 +88,31 @@ def serverCom(clientPort=8888):
                 client, address = ls.accept()
                 print(f"connection from {address}")
                 with client:
+                    # check the length of the massage to recieve (encoded json) and decode
                     len_info = client.recv(4)
                     len_mes = struct.unpack("I", len_info)[0]
-                    message = client.recv(len_mes) #sould receive ping
+                    message = client.recv(len_mes)
                     while len(message) < len_mes:
                         message += client.recv(len_mes - len(message))
-                    client_message = message.decode('utf-8')
-                    
+                    # should receive ping or the game state
+                    client_message = message.decode("utf-8")
                     client_message_dict = json.loads(client_message)
-                    #print(client_message_dict)
 
+                    # respond to ping request (to make sure we are still connected)
                     if client_message_dict["request"] == "ping":
-                        client.send(struct.pack("I", len(pongMessage())))
-                        client.send(pongMessage()) #sould send pong
-                        #print(json.loads(pongMessage()))
+                        pong = pong_message()
+                        client.send(struct.pack("I", len(pong)))
+                        client.send(pong)  # sould send pong
 
+                    # respond to play request and show possible error messages
                     elif client_message_dict["request"] == "play":
                         boardState = client_message_dict["state"]
-                        mm = moveMessage(boardState)
+                        mm = move_message(boardState)
                         client.send(struct.pack("I", len(mm)))
-                        client.send(mm) #sould send the move
+                        client.send(mm)  # sould send the move
                         for error in client_message_dict["errors"]:
                             error.pop("state", None)
                         print(client_message_dict["errors"])
-
 
             except socket.timeout:
                 pass

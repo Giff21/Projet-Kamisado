@@ -1,8 +1,8 @@
-from communication import inscription, serverCom
+from communication import inscription, server_communication
 
-serverIP = "172.17.10.54"
+serverIP = "192.168.129.11"
 clientPort = 8889
 
 if __name__ == "__main__":
-    inscription("Hello2", [33333,44444], serverIP, clientPort)
-    serverCom(clientPort)
+    inscription("Hello2", [33333, 44444], serverIP, clientPort)
+    server_communication(clientPort)
