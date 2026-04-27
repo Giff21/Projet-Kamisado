@@ -1,45 +1,48 @@
-#1)find all the available tiles
-#2)move to a random available tile -> return a list [final_rows, final_column]
-#3)put in common [[initial_rows, initial_column], [final_rows, final_column]]
-#4)find the best move from the available tiles: the closest to the ennemi end without giving the win in the next round -> return a list [final_rows, final_column]
+# 1)find all the available tiles
+# 2)move to a random available tile -> return a list [final_rows, final_column]
+# 3)put in common [[initial_rows, initial_column], [final_rows, final_column]]
+# 4)find the best move from the available tiles: the closest to the ennemi end without giving the win in the next round -> return a list [final_rows, final_column]
 import random
-from Pawn_finder2 import FindPawn2
+from pawn_finder import find_pawn
 
 
-def PossibleMove(dark, light, pawn, player):
-    """Return [finale raw, final column]
-    args :  dark : list of dark pawn positions
-            light : list of light pawn positions
-            pawn : position of the pawn we need to move
-            player : we are 0 (dark) or 1 (light)
+def possible_move(dark: list, light: list, pawn: list, player: int) -> list:
+    """gives the coordonates of every tiles we can go
 
-    descr : tell a direction to this function and will give you all tha available move
-    
+    Args:
+        dark (list): darks pawn positions
+        light (list): light pawns positions
+        pawn (list): position of the pawn we havve to play
+        player (int): 0 (dark) or 1 (light)
+
+    Returns:
+        list: a list of all possible coordonates (list of lists)
     """
 
-    PawnRow = pawn[0]
-    PawnColumn = pawn[1]
-    print(f'position pion:{pawn}')
-    tower_position = dark + light #coo of all towers
-    #print(tower_position)
-    possible_move =[]
+    pawn_row = pawn[0]
+    pawn_column = pawn[1]
+    print(f"position pion:{pawn}")
+    towers_positions = dark + light  # updated coo of all towers
+    possible_move = []
 
+    # possible movements
     if player == 0:
-        directions = [[-1,0], [-1,1], [-1,-1]]
+        directions = [[-1, 0], [-1, 1], [-1, -1]]
     else:
-        directions = [[1,0], [1,-1], [1,1]]
+        directions = [[1, 0], [1, -1], [1, 1]]
 
-    for Drows, Dcolumn in directions:
-        currentRow = PawnRow + Drows
-        currentColumn = PawnColumn + Dcolumn
+    # check possible tiles (front, diagonale right then left) and put it in a list
+    for dir_rows, dir_column in directions:
+        currentRow = pawn_row + dir_rows
+        currentColumn = pawn_column + dir_column
 
-        while 0 <= currentRow < 8 and 0 <= currentColumn < 8:
-            if [currentRow, currentColumn] in tower_position:
+        while 0 <= currentRow < 8 and 0 <= currentColumn < 8:  # dimentions of the board
+            if [currentRow, currentColumn] in towers_positions:
                 break
-            
+
             possible_move.append([currentRow, currentColumn])
-            currentRow += Drows
-            currentColumn += Dcolumn
+            currentRow += dir_rows
+            currentColumn += dir_column
 
     if not possible_move:
         print("PAS DE MOVE POSSIBLE")
@@ -48,22 +51,24 @@ def PossibleMove(dark, light, pawn, player):
     return possible_move
 
 
-def Minamax() -> list:
+def minamax() -> list:
     pass
 
 
-def move(boardState) -> list:
-    """Return [[initRow, initCol],[finalRow, finalCOl]]
+def move(boardState: dict) -> list:
+    """take the board information and choose a move with the final position
 
-    descr : take the board inforamtion from FindPawn2 give it to possibleMove that find a final pawn tile
-    
+    Args:
+        boardState (dict): current state of the game (color of the tile, pawns and current player)
+
+    Returns:
+        list: the tile we want to move from our current position
     """
-    dark, light, pawn, player = FindPawn2(boardState)
-    list_move = PossibleMove(dark, light, pawn, player)
+
+    dark, light, pawn, player = find_pawn(boardState)
+    list_move = possible_move(dark, light, pawn, player)
     final_move = random.choice(list_move)
 
-    print(f'position finale:{final_move}')
+    print(f"position finale:{final_move}")
 
     return [pawn, final_move]
-
-
