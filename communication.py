@@ -2,7 +2,7 @@ import socket
 import json
 import struct
 import random
-from AI_move import move
+from ai_move import move
 
 
 def inscription(
