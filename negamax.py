@@ -1,4 +1,5 @@
-from ai_move import possible_move
+from pawn_finder import find_pawn
+import copy
 
 
 def winner(dark_pos: list, light_pos: list) -> int:
@@ -7,7 +8,6 @@ def winner(dark_pos: list, light_pos: list) -> int:
     Args:
         dark_pos (list): dark pawns positions
         light_pos (list): light panws positions
-        player (int): player side 0(dark) 1(light)
 
     Returns:
         int: the winning player side 0 or 1
@@ -19,6 +19,7 @@ def winner(dark_pos: list, light_pos: list) -> int:
     for pos in light_pos:
         if pos[0] == 7:
             return 1
+
     return None
 
 
@@ -43,21 +44,65 @@ def utility(dark_pos: list, light_pos: list, player: int) -> int:
     return -1
 
 
-def game_over(dark_pos: list, light_pos: list) -> bool:
+def game_over(dark_pos: list, light_pos: list, list_move: list) -> bool:
     """check if the game has a winner or is blocked
 
     Args:
         dark_pos (list): dark pawns positions
         light_pos (list): light panws positions
-        player (int): player side 0(dark) 1(light)
+        list_move (list): all the current moves
 
     Returns:
         bool: True=game is over, False=game not over
     """
+
     if winner(dark_pos, light_pos) is not None:
         print("there is a game winner")
         return True  # game over, there is a winner
-    if len(possible_move) == 0:
+    if not list_move:
         print("the game is blocked")
         return True  # game over, game blocked
     return False
+
+
+def apply(boardState: dict, move: list, player: int, pawn: list) -> list:
+    """create a copy of the current game and play one step further
+
+    Args:
+        boardState (dict): the state of the board
+        move (list): the move we want to make
+        player (int): player side 0(dark) 1(light)
+        pawn (list): coo of our pawn
+
+    Returns:
+        dict: the new board with the predicted move
+    """
+    new_state = copy.deepcopy(boardState)  # copy the entire dictionnary
+    new_board = new_state["board"]
+    new_row, new_col = move
+    old_row, old_col = pawn
+
+    # take the info of the old and new tile
+    old_cell_color, old_tile = new_board[old_row][
+        old_col
+    ]  # tile is ["piece_color","pawn_side"]
+    new_cell_color, new_tile = new_board[new_row][new_col]
+    # erase the pawn in the old position and write it in the new position
+    new_board[old_row][old_col] = [old_cell_color, None]
+    new_board[new_row][new_col] = [new_cell_color, old_tile]
+    # write the new cell_color
+    new_state["color"] = new_cell_color
+    new_state["current"] = 1 - player
+
+    return new_state
+
+
+def negamax(
+    boardState: dict, list_move: list, alpha=float("-inf"), beta=float("inf")
+) -> list:
+
+    dark, light, pawn, player = find_pawn(boardState)
+    if game_over(dark, light, list_move):
+        return -utility(dark, light, player), None
+
+    the_value, the_move = float("-inf"), None
