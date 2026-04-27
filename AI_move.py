@@ -55,7 +55,7 @@ def minamax() -> list:
     pass
 
 
-def move(boardState: dict) -> list:
+def move(boardState: dict, strategy) -> list:
     """take the board information and choose a move with the final position
 
     Args:
@@ -64,10 +64,15 @@ def move(boardState: dict) -> list:
     Returns:
         list: the tile we want to move from our current position
     """
-
     dark, light, pawn, player = find_pawn(boardState)
     list_move = possible_move(dark, light, pawn, player)
-    final_move = random.choice(list_move)
+
+    if strategy:
+        final_move = random.choice(list_move)
+        print("SMART MOVE")
+    else:
+        final_move = random.choice(list_move)
+        print("STUPID MOVE")
 
     print(f"position finale:{final_move}")
 
