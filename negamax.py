@@ -1,6 +1,5 @@
 from ai_move import possible_move
 from pawn_finder import find_pawn
-import copy
 import random
 import time
 
@@ -26,19 +25,18 @@ def winner(dark_pos: list, light_pos: list) -> int:
     return None
 
 
-def heurestic(boardState: dict, player: int, list_move: list):
-    """_summary_
+def heurestic(dark_pos: list, light_pos: list, player: int, list_move: list) -> int:
+    """find the shortest distance from the winning positions
 
     Args:
-        boardState (dict): _description_
-        player (int): _description_
-        list_move (list): _description_
+        dark_pos (list): positions of all dark pawns
+        light_pos (list): positions of all light pawns
+        player (int): current side 0(dark) 1(light)
+        list_move (list): all available move from the pawn tile
 
     Returns:
-        _type_: _description_
+        int: positive I'm closest to winning, negative ennemy is closest to winning
     """
-    # we take the move with the lowest distance
-    dark_pos, light_pos, pawn, _ = find_pawn(boardState)
     if game_over(dark_pos, light_pos, list_move):
         the_winner = winner(dark_pos, light_pos)
         if the_winner is None:
@@ -48,14 +46,15 @@ def heurestic(boardState: dict, player: int, list_move: list):
         return -9
 
     # calculate the distance from winning
+    dark_rows = [pos[0] for pos in dark_pos]
+    light_rows = [pos[0] for pos in light_pos]
     if player == 0:
-        my_distance = min(pos[0] for pos in dark_pos)
-        enemy_distance = 7 - max(pos[0] for pos in light_pos)
+        my_distance = min(dark_rows)
+        enemy_distance = 7 - max(light_rows)
     else:
-        my_distance = 7 - max(pos[0] for pos in light_pos)
-        enemy_distance = min(pos[0] for pos in dark_pos)
+        my_distance = 7 - max(light_rows)
+        enemy_distance = min(dark_rows)
 
-    # positive I'm colsesttot winning, negative ennemy is closest to winning
     return enemy_distance - my_distance
 
 
@@ -91,7 +90,12 @@ def apply(boardState: dict, move: list, player: int, pawn: list) -> dict:
     Returns:
         dict: the new board with the predicted move
     """
-    new_state = copy.deepcopy(boardState)  # copy the entire dictionnary
+    # copy the entire dictionnary
+    new_state = {
+        "board": [row[:] for row in boardState["board"]],
+        "color": boardState["color"],
+        "current": boardState["current"],
+    }
     new_board = new_state["board"]
     new_row, new_col = move
     old_row, old_col = pawn
@@ -134,14 +138,15 @@ def negamax(
     Returns:
         list: best move score, best final coordanate
     """
-    # if longer than time_limit, we play the best move found in the depth
     dark, light, pawn, player = find_pawn(boardState)
-    if time.time() - start_time > time_limit:
-        return -heurestic(boardState, player, list_move), None
 
-    # same thing with game over or no play possible
-    if game_over(dark, light, list_move) or depth == 0:
-        return -heurestic(boardState, player, list_move), None
+    # if longer than time_limit, we play the best move found in the depth, same thing with game over or no play possible
+    if (
+        (time.time() - start_time > time_limit)
+        or game_over(dark, light, list_move)
+        or depth == 0
+    ):
+        return -heurestic(dark, light, player, list_move), None
 
     the_value, the_move = float("-inf"), None  # best score initialize
 
@@ -180,7 +185,7 @@ def move(boardState: dict, strategy: bool, time_limit: float = 2.5) -> list:
     if strategy:
         # print("SMART MOVE")
         start_time = time.time()
-        for depth in range(1, 20):
+        for depth in range(1, 20):  # 20 is arbitrary (usually around depth 8-12)
             if time.time() - start_time > time_limit:
                 break
             _, candidate = negamax(
