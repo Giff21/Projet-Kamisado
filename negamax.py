@@ -1,3 +1,4 @@
+from ai_move import possible_move
 from pawn_finder import find_pawn
 import copy
 
@@ -106,3 +107,22 @@ def negamax(
         return -utility(dark, light, player), None
 
     the_value, the_move = float("-inf"), None
+
+    for move in list_move:
+        # new game positions
+        successor = apply(boardState, move, player, pawn)
+        new_dark, new_light, new_pawn, new_player = find_pawn(successor)
+        new_list_move = possible_move(new_dark, new_light, new_pawn, new_player)
+        # iteration
+        value, _ = negamax(successor, new_list_move, -beta, -alpha)
+
+        if value > the_value:
+            the_value, the_move = value, move
+        alpha = max(alpha, the_value)
+
+        if alpha >= beta:
+            break
+    return the_value, the_move
+
+
+# circular import probleme
