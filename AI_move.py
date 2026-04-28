@@ -22,7 +22,7 @@ def possible_move(dark: list, light: list, pawn: list, player: int) -> list:
 
     pawn_row = pawn[0]
     pawn_column = pawn[1]
-    print(f"position pion:{pawn}")
+    # print(f"position pion:{pawn}")
     towers_positions = dark + light  # updated coo of all towers
     possible_move = []
 
@@ -46,7 +46,7 @@ def possible_move(dark: list, light: list, pawn: list, player: int) -> list:
             currentColumn += dir_column
 
     if not possible_move:
-        print("PAS DE MOVE POSSIBLE")
+        # print("PAS DE MOVE POSSIBLE")
         return [pawn, pawn]
 
     return possible_move

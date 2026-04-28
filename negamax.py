@@ -2,6 +2,7 @@ from ai_move import possible_move
 from pawn_finder import find_pawn
 import copy
 import random
+import time
 
 
 def winner(dark_pos: list, light_pos: list) -> int:
@@ -58,10 +59,8 @@ def game_over(dark_pos: list, light_pos: list, list_move: list) -> bool:
     """
 
     if winner(dark_pos, light_pos) is not None:
-        print("there is a game winner")
         return True  # game over, there is a winner
     if not list_move:
-        print("the game is blocked")
         return True  # game over, game blocked
     return False
 
@@ -101,12 +100,17 @@ def apply(boardState: dict, move: list, player: int, pawn: list) -> list:
 def negamax(
     boardState: dict,
     list_move: list,
+    start_time: float,
+    time_limit: float,
     depth: int = 4,
     alpha=float("-inf"),
     beta=float("inf"),
 ) -> list:
 
     dark, light, pawn, player = find_pawn(boardState)
+    if time.time() - start_time > time_limit:
+        return -heurestic(boardState, player, list_move), None
+
     if game_over(dark, light, list_move) or depth == 0:
         return -heurestic(boardState, player, list_move), None
 
@@ -118,7 +122,9 @@ def negamax(
         new_dark, new_light, new_pawn, new_player = find_pawn(successor)
         new_list_move = possible_move(new_dark, new_light, new_pawn, new_player)
         # iteration
-        value, _ = negamax(successor, new_list_move, depth - 1, -beta, -alpha)
+        value, _ = negamax(
+            successor, new_list_move, start_time, time_limit, depth - 1, -beta, -alpha
+        )
         if value > the_value:
             the_value, the_move = value, move
         alpha = max(alpha, the_value)
@@ -128,7 +134,7 @@ def negamax(
     return -the_value, the_move
 
 
-def move(boardState: dict, strategy: bool) -> list:
+def move(boardState: dict, strategy: bool, time_limit: float = 2.5) -> list:
     """take the board information and choose a move with the final position
 
     Args:
@@ -141,15 +147,25 @@ def move(boardState: dict, strategy: bool) -> list:
     list_move = possible_move(dark, light, pawn, player)
 
     if strategy:
-        print("SMART MOVE")
-        _, final_move = negamax(
-            boardState, list_move, alpha=float("-inf"), beta=float("inf")
-        )
-
+        # print("SMART MOVE")
+        start_time = time.time()
+        for depth in range(1, 20):
+            if time.time() - start_time > time_limit:
+                break
+            _, final_move = negamax(
+                boardState,
+                list_move,
+                start_time,
+                time_limit,
+                depth,
+                alpha=float("-inf"),
+                beta=float("inf"),
+            )
+        print(f"depth: {depth}, best move: {final_move} ")
     else:
         final_move = random.choice(list_move)
-        print("STUPID MOVE")
+        # print("STUPID MOVE")
 
-    print(f"position finale:{final_move}")
+    print(f"starting position:{pawn}")
 
     return [pawn, final_move]

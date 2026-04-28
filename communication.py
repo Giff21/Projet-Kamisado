@@ -50,7 +50,7 @@ def pong_message() -> json:
     return json.dumps(pong_data).encode("utf-8")
 
 
-def move_message(boardState: dict, strategy: bool) -> json:
+def move_message(boardState: dict, strategy: bool, time_limit: float) -> json:
     """use the board and move function to construct the tamplate to send
 
     Args:
@@ -59,8 +59,7 @@ def move_message(boardState: dict, strategy: bool) -> json:
     Returns:
         json: encoded json with move message
     """
-
-    move_to_play = move(boardState, strategy)
+    move_to_play = move(boardState, strategy, time_limit)
     fun_message = random.choice(["subscribed to my OnlyFans !", "you're ass!"])
 
     move_data = {
@@ -72,7 +71,9 @@ def move_message(boardState: dict, strategy: bool) -> json:
     return json.dumps(move_data).encode("utf-8")
 
 
-def server_communication(clientPort=8888, strategy=False) -> None:
+def server_communication(
+    clientPort=8888, strategy=False, time_limit: float = 2.5
+) -> None:
     """communicate with the server, send pong if ping request and send the move. Must desactivate 2 fire-wall in "par feu windows defender" do receive massages
 
     Args:
@@ -107,7 +108,7 @@ def server_communication(clientPort=8888, strategy=False) -> None:
                     # respond to play request and show possible error messages
                     elif client_message_dict["request"] == "play":
                         boardState = client_message_dict["state"]
-                        mm = move_message(boardState, strategy)
+                        mm = move_message(boardState, strategy, time_limit)
                         client.send(struct.pack("I", len(mm)))
                         client.send(mm)  # sould send the move
                         for error in client_message_dict["errors"]:
