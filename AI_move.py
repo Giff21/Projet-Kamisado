@@ -1,12 +1,3 @@
-# 1)find all the available tiles
-# 2)move to a random available tile -> return a list [final_rows, final_column]
-# 3)put in common [[initial_rows, initial_column], [final_rows, final_column]]
-# 4)find the best move from the available tiles: the closest to the ennemi end without giving the win in the next round -> return a list [final_rows, final_column]
-# import random
-# from pawn_finder import find_pawn
-# from negamax import negamax
-
-
 def possible_move(dark: list, light: list, pawn: list, player: int) -> list:
     """gives the coordonates of every tiles we can go
 
