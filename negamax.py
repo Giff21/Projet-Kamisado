@@ -25,25 +25,24 @@ def winner(dark_pos: list, light_pos: list) -> int:
     return None
 
 
-def utility(dark_pos: list, light_pos: list, player: int) -> int:
-    """score the number of moves it takes to win
+def heurestic(boardState: dict, player: int, list_move: list):
+    # we take the move with the lowest distance
+    dark_pos, light_pos, pawn, _ = find_pawn(boardState)
+    if game_over(dark_pos, light_pos, list_move):
+        the_winner = winner(dark_pos, light_pos)
+        if the_winner is None:
+            return 0
+        elif the_winner == player:
+            return 9
+        return -9
 
-    Args:
-        dark_pos (list): dark pawns positions
-        light_pos (list): light panws positions
-        player (int): player side 0(dark) 1(light)
-
-    Returns:
-        int: winning = +1, losing= -1
-    """
-    the_winner = winner(dark_pos, light_pos)
-
-    if the_winner is None:
-        return 0
-
-    if the_winner == player:
-        return 1
-    return -1
+    if player == 0:
+        my_distance = min(pos[0] for pos in dark_pos)
+        enemy_distance = 7 - max(pos[0] for pos in light_pos)
+    else:
+        my_distance = 7 - max(pos[0] for pos in light_pos)
+        enemy_distance = min(pos[0] for pos in dark_pos)
+    return enemy_distance - my_distance
 
 
 def game_over(dark_pos: list, light_pos: list, list_move: list) -> bool:
@@ -84,14 +83,14 @@ def apply(boardState: dict, move: list, player: int, pawn: list) -> list:
     new_row, new_col = move
     old_row, old_col = pawn
 
-    # take the info of the old and new tile
-    old_cell_color, old_tile = new_board[old_row][
-        old_col
-    ]  # tile is ["piece_color","pawn_side"]
+    # take the info of the old and new tile, tile is ["piece_color","pawn_side"]
+    old_cell_color, old_tile = new_board[old_row][old_col]
     new_cell_color, new_tile = new_board[new_row][new_col]
+
     # erase the pawn in the old position and write it in the new position
     new_board[old_row][old_col] = [old_cell_color, None]
     new_board[new_row][new_col] = [new_cell_color, old_tile]
+
     # write the new cell_color
     new_state["color"] = new_cell_color
     new_state["current"] = 1 - player
@@ -109,7 +108,7 @@ def negamax(
 
     dark, light, pawn, player = find_pawn(boardState)
     if game_over(dark, light, list_move) or depth == 0:
-        return -utility(dark, light, player), None
+        return -heurestic(boardState, player, list_move), None
 
     the_value, the_move = float("-inf"), None
 
@@ -126,7 +125,7 @@ def negamax(
 
         if alpha >= beta:
             break
-    return the_value, the_move
+    return -the_value, the_move
 
 
 def move(boardState: dict, strategy: bool) -> list:
