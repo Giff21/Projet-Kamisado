@@ -2,7 +2,7 @@ import socket
 import json
 import struct
 import random
-from ai_move import move
+from negamax import move
 
 
 def inscription(

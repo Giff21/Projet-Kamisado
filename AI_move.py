@@ -2,9 +2,9 @@
 # 2)move to a random available tile -> return a list [final_rows, final_column]
 # 3)put in common [[initial_rows, initial_column], [final_rows, final_column]]
 # 4)find the best move from the available tiles: the closest to the ennemi end without giving the win in the next round -> return a list [final_rows, final_column]
-import random
-from pawn_finder import find_pawn
-from negamax import winner, utility, game_over
+# import random
+# from pawn_finder import find_pawn
+# from negamax import negamax
 
 
 def possible_move(dark: list, light: list, pawn: list, player: int) -> list:
@@ -50,30 +50,3 @@ def possible_move(dark: list, light: list, pawn: list, player: int) -> list:
         return [pawn, pawn]
 
     return possible_move
-
-
-def move(boardState: dict, strategy) -> list:
-    """take the board information and choose a move with the final position
-
-    Args:
-        boardState (dict): current state of the game (color of the tile, pawns and current player)
-
-    Returns:
-        list: the tile we want to move from our current position
-    """
-    dark, light, pawn, player = find_pawn(boardState)
-    list_move = possible_move(dark, light, pawn, player)
-
-    if strategy:
-        winner(dark, light)
-        utility(dark, light, player)
-        game_over(dark, light)
-        final_move = random.choice(list_move)
-        print("SMART MOVE")
-    else:
-        final_move = random.choice(list_move)
-        print("STUPID MOVE")
-
-    print(f"position finale:{final_move}")
-
-    return [pawn, final_move]

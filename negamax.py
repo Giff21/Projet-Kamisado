@@ -1,6 +1,7 @@
 from ai_move import possible_move
 from pawn_finder import find_pawn
 import copy
+import random
 
 
 def winner(dark_pos: list, light_pos: list) -> int:
@@ -99,11 +100,15 @@ def apply(boardState: dict, move: list, player: int, pawn: list) -> list:
 
 
 def negamax(
-    boardState: dict, list_move: list, alpha=float("-inf"), beta=float("inf")
+    boardState: dict,
+    list_move: list,
+    depth: int = 4,
+    alpha=float("-inf"),
+    beta=float("inf"),
 ) -> list:
 
     dark, light, pawn, player = find_pawn(boardState)
-    if game_over(dark, light, list_move):
+    if game_over(dark, light, list_move) or depth == 0:
         return -utility(dark, light, player), None
 
     the_value, the_move = float("-inf"), None
@@ -114,8 +119,7 @@ def negamax(
         new_dark, new_light, new_pawn, new_player = find_pawn(successor)
         new_list_move = possible_move(new_dark, new_light, new_pawn, new_player)
         # iteration
-        value, _ = negamax(successor, new_list_move, -beta, -alpha)
-
+        value, _ = negamax(successor, new_list_move, depth - 1, -beta, -alpha)
         if value > the_value:
             the_value, the_move = value, move
         alpha = max(alpha, the_value)
@@ -125,4 +129,28 @@ def negamax(
     return the_value, the_move
 
 
-# circular import probleme
+def move(boardState: dict, strategy: bool) -> list:
+    """take the board information and choose a move with the final position
+
+    Args:
+        boardState (dict): current state of the game (color of the tile, pawns and current player)
+
+    Returns:
+        list: the tile we want to move from our current position
+    """
+    dark, light, pawn, player = find_pawn(boardState)
+    list_move = possible_move(dark, light, pawn, player)
+
+    if strategy:
+        print("SMART MOVE")
+        _, final_move = negamax(
+            boardState, list_move, alpha=float("-inf"), beta=float("inf")
+        )
+
+    else:
+        final_move = random.choice(list_move)
+        print("STUPID MOVE")
+
+    print(f"position finale:{final_move}")
+
+    return [pawn, final_move]
