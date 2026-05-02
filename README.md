@@ -1,7 +1,7 @@
 # Projet: Kamisado
 This project is developed by NOLLET Jean-François 24087 and JURQUET Florian 24092
 
-<p align="center>
+<p align="center">
 <img src="Projet-Kamisado\public\Kamisado-image.png" width="300" height="300" />
 </p>
 
