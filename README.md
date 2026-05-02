@@ -1,8 +1,8 @@
 # Projet: Kamisado
 This project is developed by NOLLET Jean-François 24087 and JURQUET Florian 24092
 
-<p align="center>
-<img src="Projet-Kamisado\public\Kamisado-image.png" width="300" height="300" />
+<p align="center">
+<img src="\public\Kamisado-image.png" width="300" height="300" />
 </p>
 
 This IA is design to play autonomously and make the best move possible in the board game Kamisado. Kamisado is a turn-based game where the goal is to arrive at the opponent's starting line while respecting [these rules](https://www.yucata.de/en/Rules/Kamisado)
