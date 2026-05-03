@@ -1,7 +1,7 @@
 import random
 
 
-def find_pawn(boardState: dict) -> list:
+def find_pawn(boardState: dict) -> tuple:
     """goes through the board and find all the pawns informations
 
     Args:
