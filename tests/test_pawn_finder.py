@@ -1,9 +1,12 @@
 # tests for the pawn_finder file
 from src.pawn_finder import find_pawn
+import pytest
 
 #example of recieved message from the server with recu2 being a modification of recu1
 #representing a played game state
-recu1 ={
+@pytest.fixture
+def recu1():
+  return {
    "request": "play",
    "lives": 3,
    "errors": "list_of_errors",
@@ -94,7 +97,9 @@ recu1 ={
 }
 }
 
-recu2 ={
+@pytest.fixture
+def recu2():
+  return {
    "request": "play",
    "lives": 3,
    "errors": "list_of_errors",
