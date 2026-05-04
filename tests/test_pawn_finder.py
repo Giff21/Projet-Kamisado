@@ -198,29 +198,29 @@ def test_type_check(recu1):
     assert isinstance(result[0],list), 'dark_pawn type is not list'
     assert isinstance(result[1],list), 'light_pawn type is not list'
     assert isinstance(result[2],list), 'chosen_pos is not list'
-    assert isinstance(result[3],list),  'current_side is not int'
+    assert isinstance(result[3],int),  'current_side is not int'
 
 def test_dark_pawn_pos(recu1,recu2):
     boardState1 = recu1['state']
     boardState2 = recu2['state']
     dark_pawn_pos1 = [[7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7]]
-    dark_pawn_pos2 = [[6, 0], [7, 1], [6, 2], [7, 3], [6, 4], [7, 5], [6, 6], [7, 7]]
+    dark_pawn_pos2 = [[6, 0], [6, 2], [6, 4], [6, 6], [7, 1], [7, 3], [7, 5], [7, 7]]
     result1 = find_pawn(boardState1)
     result2 = find_pawn(boardState2)
 
-    assert dark_pawn_pos1 in result1[0], 'list of dark_pawn_pos1 is not correct'
-    assert dark_pawn_pos2 in result2[0], 'list of dark_pawn_pos2 is not correct'
+    assert dark_pawn_pos1 == result1[0], 'list of dark_pawn_pos1 is not correct'
+    assert dark_pawn_pos2 == result2[0], 'list of dark_pawn_pos2 is not correct'
 
 def test_light_pawn_pos(recu1,recu2):
     boardState1 = recu1['state']
     boardState2 = recu2['state']
     light_pawn_pos1 = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7]]
-    light_pawn_pos2 = [[1, 0], [0, 1], [1, 2], [0, 3], [1, 4], [0, 5], [1, 6], [0, 7]]
+    light_pawn_pos2 = [[0, 1], [0, 3], [0, 5], [0, 7], [1, 0], [1, 2], [1, 4], [1, 6]] 
     result1 = find_pawn(boardState1)
     result2 = find_pawn(boardState2)
 
-    assert light_pawn_pos1 in result1[1], 'list of light_pawn_pos1 is not correct'
-    assert light_pawn_pos2 in result2[1], 'list of light_pawn_pos2 is not correct'
+    assert light_pawn_pos1 == result1[1], 'list of light_pawn_pos1 is not correct'
+    assert light_pawn_pos2 == result2[1], 'list of light_pawn_pos2 is not correct'
 
 def test_chosen_pawn_red(recu2):
     boardState = recu2['state']
@@ -242,4 +242,3 @@ def test_own_color(recu1,recu2):
 
     assert 0 in result1[3], 'own color is not dark'
     assert 1 in result2[3], 'own color is not light'
-
