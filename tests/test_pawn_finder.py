@@ -226,13 +226,13 @@ def test_chosen_pawn_red(recu2):
     boardState = recu2['state']
     result = find_pawn(boardState)
 
-    assert [0,3] in result[2], 'chosen pawn is not the [red,light] pawn'
+    assert [0,3] == result[2], 'chosen pawn is not the [red,light] pawn'
 
 def test_chose_pawn_null(recu1):
     boardState = recu1['state']
     result = find_pawn(boardState)
 
-    assert [7,type(int)] in result[2], 'chosen pawn is not on line 7 (dark line)'
+    assert [7,type(int)] == result[2], 'chosen pawn is not on line 7 (dark line)'
 
 def test_own_color(recu1,recu2):
     boardState1 = recu1['state']
@@ -240,5 +240,5 @@ def test_own_color(recu1,recu2):
     result1 = find_pawn(boardState1)
     result2 = find_pawn(boardState2)
 
-    assert 0 in result1[3], 'own color is not dark'
-    assert 1 in result2[3], 'own color is not light'
+    assert 0 == result1[3], 'own color is not dark'
+    assert 1 == result2[3], 'own color is not light'
