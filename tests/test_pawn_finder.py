@@ -232,7 +232,9 @@ def test_chose_pawn_null(recu1):
     boardState = recu1['state']
     result = find_pawn(boardState)
 
-    assert [7,type(int)] == result[2], 'chosen pawn is not on line 7 (dark line)'
+    assert 7 == result[2][0], 'chosen pawn is not on line 7 (dark line)'
+    assert isinstance(result[2][1], int), 'second arg is not int'
+    assert 0 <= result[2][1] <= 7, 'chosen pawn out of index'
 
 def test_own_color(recu1,recu2):
     boardState1 = recu1['state']
