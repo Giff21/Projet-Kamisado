@@ -185,7 +185,7 @@ recu2 ={
 }
 }
 
-def type_check(recu):
+def test_type_check(recu1):
     boardState = recu['state']
     result = find_pawn(boardState)
 
@@ -195,7 +195,7 @@ def type_check(recu):
     assert isinstance(result[2],list), 'chosen_pos is not list'
     assert isinstance(result[3],list),  'current_side is not int'
 
-def dark_pawn_pos(recu1,recu2):
+def test_dark_pawn_pos(recu1,recu2):
     boardState1 = recu1['state']
     boardState2 = recu2['state']
     dark_pawn_pos1 = [[7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7]]
@@ -206,7 +206,7 @@ def dark_pawn_pos(recu1,recu2):
     assert dark_pawn_pos1 in result1[0], 'list of dark_pawn_pos1 is not correct'
     assert dark_pawn_pos2 in result2[0], 'list of dark_pawn_pos2 is not correct'
 
-def light_pawn_pos(recu1,recu2):
+def test_light_pawn_pos(recu1,recu2):
     boardState1 = recu1['state']
     boardState2 = recu2['state']
     light_pawn_pos1 = [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7]]
@@ -217,19 +217,19 @@ def light_pawn_pos(recu1,recu2):
     assert light_pawn_pos1 in result1[1], 'list of light_pawn_pos1 is not correct'
     assert light_pawn_pos2 in result2[1], 'list of light_pawn_pos2 is not correct'
 
-def chosen_pawn_red(recu2):
+def test_chosen_pawn_red(recu2):
     boardState = recu2['state']
     result = find_pawn(boardState)
 
     assert [0,3] in result[2], 'chosen pawn is not the [red,light] pawn'
 
-def chose_pawn_null(recu1):
+def test_chose_pawn_null(recu1):
     boardState = recu1['state']
     result = find_pawn(boardState)
 
     assert [7,type(int)] in result[2], 'chosen pawn is not on line 7 (dark line)'
 
-def own_color(recu1,recu2):
+def test_own_color(recu1,recu2):
     boardState1 = recu1['state']
     boardState2 = recu2['state']
     result1 = find_pawn(boardState1)
@@ -237,3 +237,4 @@ def own_color(recu1,recu2):
 
     assert 0 in result1[3], 'own color is not dark'
     assert 1 in result2[3], 'own color is not light'
+
