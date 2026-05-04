@@ -186,7 +186,7 @@ recu2 ={
 }
 
 def test_type_check(recu1):
-    boardState = recu['state']
+    boardState = recu1['state']
     result = find_pawn(boardState)
 
     assert isinstance(result,tuple), 'return type is not tuple'
