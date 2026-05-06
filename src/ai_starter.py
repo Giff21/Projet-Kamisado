@@ -6,5 +6,5 @@ smart = True
 time_limit = 2.5  # max 3s
 
 if __name__ == "__main__":
-    inscription("SMART", [11111, 22222], serverIP, clientPort)
+    inscription("Wizard-of-OZ", [24087, 24092], serverIP, clientPort)
     server_communication(clientPort, smart, time_limit)
