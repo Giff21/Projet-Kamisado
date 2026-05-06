@@ -1,0 +1,368 @@
+
+#example of recieved message from the server with recu2 being a modification of recu1
+#representing a played game state
+
+def Recu1():
+  return {"request": "play",
+   "lives": 3,
+   "errors": "list_of_errors",
+   "state":{"board": [[
+      ["orange", ["pink", "light"]],
+      ["blue", ["orange", "light"]],
+      ["purple", ["green", "light"]],
+      ["pink", ["red", "light"]],
+      ["yellow", ["purple", "light"]],
+      ["red", ["blue", "light"]],
+      ["green", ["brown", "light"]],
+      ["brown", ["yellow", "light"]]
+    ],
+    [
+      ["red", "null"],
+      ["orange", "null"],
+      ["pink", "null"],
+      ["green", "null"],
+      ["blue", "null"],
+      ["yellow", "null"],
+      ["brown", "null"],
+      ["purple", "null"]
+    ],
+    [
+      ["green", "null"],
+      ["pink", "null"],
+      ["orange", "null"],
+      ["red", "null"],
+      ["purple", "null"],
+      ["brown", "null"],
+      ["yellow", "null"],
+      ["blue", "null"]
+    ],
+    [
+      ["pink", "null"],
+      ["purple", "null"],
+      ["blue", "null"],
+      ["orange", "null"],
+      ["brown", "null"],
+      ["green", "null"],
+      ["red", "null"],
+      ["yellow", "null"]
+    ],
+    [
+      ["yellow", "null"],
+      ["red", "null"],
+      ["green", "null"],
+      ["brown", "null"],
+      ["orange", "null"],
+      ["blue", "null"],
+      ["purple", "null"],
+      ["pink", "null"]
+    ],
+    [
+      ["blue", "null"],
+      ["yellow", "null"],
+      ["brown", "null"],
+      ["purple", "null"],
+      ["red", "null"],
+      ["orange", "null"],
+      ["pink", "null"],
+      ["green", "null"]
+    ],
+    [
+      ["purple", "null"],
+      ["brown", "null"],
+      ["yellow", "null"],
+      ["blue", "null"],
+      ["green", "null"],
+      ["pink", "null"],
+      ["orange", "null"],
+      ["red", "null"]
+    ],
+    [
+      ["brown", ["yellow", "dark"]],
+      ["green", ["green", "dark"]],
+      ["red", ["orange", "dark"]],
+      ["yellow", ["purple", "dark"]],
+      ["pink", ["red", "dark"]],
+      ["purple", ["brown", "dark"]],
+      ["blue", ["blue", "dark"]],
+      ["orange", ["pink", "dark"]]
+    ]
+  ],
+  "color": None,
+  "current": 0,
+  "players": ["LUR", "FKY"]
+}
+}
+
+def Recu2():
+    return {
+   "request": "play",
+   "lives": 3,
+   "errors": "list_of_errors",
+   "state":{"board": [[
+      ["orange", "null"],
+      ["blue", ["orange", "light"]],
+      ["purple","null"],
+      ["pink", ["red", "light"]],
+      ["yellow","null"],
+      ["red", ["blue", "light"]],
+      ["green", "null"],
+      ["brown", ["yellow", "light"]]
+    ],
+    [
+      ["red", ["pink", "light"]],
+      ["orange", "null"],
+      ["pink",  ["green", "light"]],
+      ["green", "null"],
+      ["blue",  ["purple", "light"]],
+      ["yellow", "null"],
+      ["brown", ["brown", "light"]],
+      ["purple", "null"]
+    ],
+    [
+      ["green", "null"],
+      ["pink", "null"],
+      ["orange", "null"],
+      ["red", "null"],
+      ["purple", "null"],
+      ["brown", "null"],
+      ["yellow", "null"],
+      ["blue", "null"]
+    ],
+    [
+      ["pink", "null"],
+      ["purple", "null"],
+      ["blue", "null"],
+      ["orange", "null"],
+      ["brown", "null"],
+      ["green", "null"],
+      ["red", "null"],
+      ["yellow", "null"]
+    ],
+    [
+      ["yellow", "null"],
+      ["red", "null"],
+      ["green", "null"],
+      ["brown", "null"],
+      ["orange", "null"],
+      ["blue", "null"],
+      ["purple", "null"],
+      ["pink", "null"]
+    ],
+    [
+      ["blue", "null"],
+      ["yellow", "null"],
+      ["brown", "null"],
+      ["purple", "null"],
+      ["red", "null"],
+      ["orange", "null"],
+      ["pink", "null"],
+      ["green", "null"]
+    ],
+    [
+      ["purple", ["yellow", "dark"]],
+      ["brown", "null"],
+      ["yellow", ["orange", "dark"]],
+      ["blue", "null"],
+      ["green", ["red", "dark"]],
+      ["pink", "null"],
+      ["orange", ["blue", "dark"]],
+      ["red", "null"]
+    ],
+    [
+      ["brown", "null"],
+      ["green", ["green", "dark"]],
+      ["red", "null"],
+      ["yellow", ["purple", "dark"]],
+      ["pink", "null"],
+      ["purple", ["brown", "dark"]],
+      ["blue", "null"],
+      ["orange", ["pink", "dark"]]
+    ]
+  ],
+  "color": 'red',
+  "current": 1,
+  "players": ["LUR", "FKY"]
+}
+}
+
+def Recu3():  # light win
+  return {"request": "play",
+   "lives": 3,
+   "errors": "list_of_errors",
+   "state":{"board": [[
+      ["orange", "null"],
+      ["blue", ["orange", "light"]],
+      ["purple", ["green", "light"]],
+      ["pink", ["red", "light"]],
+      ["yellow", ["purple", "light"]],
+      ["red", ["blue", "light"]],
+      ["green", ["brown", "light"]],
+      ["brown", ["yellow", "light"]]
+    ],
+    [
+      ["red", "null"],
+      ["orange", "null"],
+      ["pink", "null"],
+      ["green", "null"],
+      ["blue", "null"],
+      ["yellow", "null"],
+      ["brown", "null"],
+      ["purple", "null"]
+    ],
+    [
+      ["green", "null"],
+      ["pink", "null"],
+      ["orange", "null"],
+      ["red", "null"],
+      ["purple", "null"],
+      ["brown", "null"],
+      ["yellow", "null"],
+      ["blue", "null"]
+    ],
+    [
+      ["pink", "null"],
+      ["purple", "null"],
+      ["blue", "null"],
+      ["orange", "null"],
+      ["brown", "null"],
+      ["green", "null"],
+      ["red", "null"],
+      ["yellow", "null"]
+    ],
+    [
+      ["yellow", "null"],
+      ["red", "null"],
+      ["green", "null"],
+      ["brown", "null"],
+      ["orange", "null"],
+      ["blue", "null"],
+      ["purple", "null"],
+      ["pink", "null"]
+    ],
+    [
+      ["blue", "null"],
+      ["yellow", ["green", "dark"]],
+      ["brown", "null"],
+      ["purple", "null"],
+      ["red", "null"],
+      ["orange", "null"],
+      ["pink", "null"],
+      ["green", "null"]
+    ],
+    [
+      ["purple", "null"],
+      ["brown", "null"],
+      ["yellow", "null"],
+      ["blue", "null"],
+      ["green", "null"],
+      ["pink", "null"],
+      ["orange", "null"],
+      ["red", "null"]
+    ],
+    [
+      ["brown", ["yellow", "dark"]],
+      ["green", ["pink", "light"]],
+      ["red", ["orange", "dark"]],
+      ["yellow", ["purple", "dark"]],
+      ["pink", ["red", "dark"]],
+      ["purple", ["brown", "dark"]],
+      ["blue", ["blue", "dark"]],
+      ["orange", ["pink", "dark"]]
+    ]
+  ],
+  "color": None,
+  "current": 0,
+  "players": ["LUR", "FKY"]
+}
+}
+
+def Recu4():  # dark win
+  return {"request": "play",
+   "lives": 3,
+   "errors": "list_of_errors",
+   "state":{"board": [[
+      ["orange", ["green", "dark"]],
+      ["blue", ["orange", "light"]],
+      ["purple", ["green", "light"]],
+      ["pink", ["red", "light"]],
+      ["yellow", ["purple", "light"]],
+      ["red", ["blue", "light"]],
+      ["green", ["brown", "light"]],
+      ["brown", ["yellow", "light"]]
+    ],
+    [
+      ["red", ["pink", "light"]],
+      ["orange", "null"],
+      ["pink", "null"],
+      ["green", "null"],
+      ["blue", "null"],
+      ["yellow", "null"],
+      ["brown", "null"],
+      ["purple", "null"]
+    ],
+    [
+      ["green", "null"],
+      ["pink", "null"],
+      ["orange", "null"],
+      ["red", "null"],
+      ["purple", "null"],
+      ["brown", "null"],
+      ["yellow", "null"],
+      ["blue", "null"]
+    ],
+    [
+      ["pink", "null"],
+      ["purple", "null"],
+      ["blue", "null"],
+      ["orange", "null"],
+      ["brown", "null"],
+      ["green", "null"],
+      ["red", "null"],
+      ["yellow", "null"]
+    ],
+    [
+      ["yellow", "null"],
+      ["red", "null"],
+      ["green", "null"],
+      ["brown", "null"],
+      ["orange", "null"],
+      ["blue", "null"],
+      ["purple", "null"],
+      ["pink", "null"]
+    ],
+    [
+      ["blue", "null"],
+      ["yellow", "null"],
+      ["brown", "null"],
+      ["purple", "null"],
+      ["red", "null"],
+      ["orange", "null"],
+      ["pink", "null"],
+      ["green", "null"]
+    ],
+    [
+      ["purple", "null"],
+      ["brown", "null"],
+      ["yellow", "null"],
+      ["blue", "null"],
+      ["green", "null"],
+      ["pink", "null"],
+      ["orange", "null"],
+      ["red", ]
+    ],
+    [
+      ["brown", ["yellow", "dark"]],
+      ["green", "null"],
+      ["red", ["orange", "dark"]],
+      ["yellow", ["purple", "dark"]],
+      ["pink", ["red", "dark"]],
+      ["purple", ["brown", "dark"]],
+      ["blue", ["blue", "dark"]],
+      ["orange", ["pink", "dark"]]
+    ]
+  ],
+  "color": None,
+  "current": 0,
+  "players": ["LUR", "FKY"]
+}
+}
