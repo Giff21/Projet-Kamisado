@@ -1,4 +1,4 @@
-from communication import inscription, server_communication
+from src.communication import inscription, server_communication
 
 serverIP = "192.168.129.11"
 clientPort = 8889

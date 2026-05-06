@@ -1,7 +1,8 @@
-from ai_move import possible_move
-from pawn_finder import find_pawn
+from src.ai_move import possible_move
+from src.pawn_finder import find_pawn
 import random
 import time
+import copy
 
 
 def winner(dark_pos: list, light_pos: list) -> int:
@@ -91,11 +92,7 @@ def apply(boardState: dict, move: list, player: int, pawn: list) -> dict:
         dict: the new board with the predicted move
     """
     # copy the entire dictionnary
-    new_state = {
-        "board": [row[:] for row in boardState["board"]],
-        "color": boardState["color"],
-        "current": boardState["current"],
-    }
+    new_state = copy.deepcopy(boardState)
     new_board = new_state["board"]
     new_row, new_col = move
     old_row, old_col = pawn
@@ -141,11 +138,7 @@ def negamax(
     dark, light, pawn, player = find_pawn(boardState)
 
     # if longer than time_limit, we play the best move found in the depth, same thing with game over or no play possible
-    if (
-        (time.time() - start_time > time_limit)
-        or game_over(dark, light, list_move)
-        or depth == 0
-    ):
+    if (time.time() - start_time > time_limit) or game_over(dark, light, list_move) or depth == 0:
         return -heurestic(dark, light, player, list_move), None
 
     the_value, the_move = float("-inf"), None  # best score initialize
@@ -156,9 +149,7 @@ def negamax(
         new_dark, new_light, new_pawn, new_player = find_pawn(successor)
         new_list_move = possible_move(new_dark, new_light, new_pawn, new_player)
         # iteration, we now take the place of the opponent
-        value, _ = negamax(
-            successor, new_list_move, start_time, time_limit, depth - 1, -beta, -alpha
-        )
+        value, _ = negamax(successor, new_list_move, start_time, time_limit, depth - 1, -beta, -alpha)
         # find the best move (closest ot 0 value)
         if value > the_value:
             the_value, the_move = value, move
