@@ -2,7 +2,7 @@ import socket
 import json
 import struct
 import random
-from negamax import move
+from src.negamax import move
 
 
 def inscription(
@@ -71,9 +71,7 @@ def move_message(boardState: dict, strategy: bool, time_limit: float) -> json:
     return json.dumps(move_data).encode("utf-8")
 
 
-def server_communication(
-    clientPort=8888, strategy=False, time_limit: float = 2.5
-) -> None:
+def server_communication(clientPort=8888, strategy=False, time_limit: float = 2.5) -> None:
     """communicate with the server, send pong if ping request and send the move. Must desactivate 2 fire-wall in "par feu windows defender" do receive massages
 
     Args:
