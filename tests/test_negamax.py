@@ -1,6 +1,9 @@
-from src.negamax import winner, heurestic, game_over, apply
+from src.negamax import winner, heurestic, game_over, apply, negamax, move
 from tests.board_test import tboard
+from src.pawn_finder import find_pawn
+from src.ai_move import possible_move
 import copy
+import time
 
 
 def test_winner():
@@ -36,3 +39,25 @@ def test_apply():
     assert state["board"][4][5][1] == ["blue", "dark"]
     assert state["color"] == state["board"][4][5][0]
     assert state["current"] == 1
+
+
+def test_negamax():
+    board = copy.deepcopy(tboard)
+    dark, light, pawn, player = find_pawn(board)
+    list_move = possible_move(dark, light, pawn, player)
+    the_value, the_move = negamax(board, list_move, time.time(), 3, 3)
+    assert the_move in list_move
+    the_value2, the_move2 = negamax(board, [], time.time(), 3, 3)
+    assert the_move2 is None
+
+
+def test_move():
+    board = copy.deepcopy(tboard)
+    dark, light, pawn, player = find_pawn(board)
+    list_move = possible_move(dark, light, pawn, player)
+    result = move(board, strategy=True, time_limit=3)
+    assert result[0] == pawn
+    assert result[1] in list_move
+    result2 = move(board, strategy=False, time_limit=3)
+    assert result2[0] == pawn
+    assert result2[1] in list_move
