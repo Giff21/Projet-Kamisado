@@ -16,7 +16,7 @@ def find_pawn(boardState: dict) -> tuple:
 
     dark_pawn = []
     light_pawn = []
-    chosen_pos = None  # coo of our pawn, at first there is no forced tile to move
+    chosen_pos = None  # first we don't know the position of our pawn
 
     if current_side == 0:
         pawn_team = "dark"
