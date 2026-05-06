@@ -16,7 +16,7 @@ def inscription(
 
     Args:
         AIname (str): name of the AI
-        matricule (list[int, int]): list of the number of 5 digits
+        matricule (list[int, int]): list of two numbers of 5 digits
         servIPadress (str): IP adress of the server we want to play in
         clientPort (int, optional): client communication free port. Defaults to 8888.
         serverPort (int, optional): server port. Defaults to 3000.
@@ -28,7 +28,7 @@ def inscription(
         "name": AIname,
         "matricules": [matricule[0], matricule[1]],
     }
-    # send inscription info to the server, tell the server to communicate with clientPort
+    # tell the server to communicate with clientPort
     with socket.socket() as s:
         s.connect((servIPadress, serverPort))
         message = json.dumps(inscription_data).encode("utf-8")
@@ -39,7 +39,7 @@ def inscription(
 
 
 def pong_message() -> json:
-    """pong massage
+    """construct the pong massage to send
 
     Returns:
         json: encoded json with pong massage
@@ -50,21 +50,24 @@ def pong_message() -> json:
     return json.dumps(pong_data).encode("utf-8")
 
 
-def move_message(boardState: dict, strategy: bool, time_limit: float) -> json:
-    """use the board and move function to construct the tamplate to send
+def move_message(boardState: dict, strategy: bool, time_limit: float = 2.5) -> json:
+    """construct the move message to send
 
     Args:
         boardState (dict): current state of the game
+        strategy (bool): algorithm (True) or random (False)
+        time_limit (float): must send after this limit. efaults to 2.5.
 
     Returns:
         json: encoded json with move message
     """
+
     move_to_play = move(boardState, strategy, time_limit)
     fun_message = random.choice(["subscribed to my OnlyFans !", "you're ass!"])
 
     move_data = {
         "response": "move",
-        "move": move_to_play,  # must be [[1,2],[3,4]]
+        "move": move_to_play,
         "message": fun_message,
     }
 
@@ -72,14 +75,16 @@ def move_message(boardState: dict, strategy: bool, time_limit: float) -> json:
 
 
 def server_communication(clientPort=8888, strategy=False, time_limit: float = 2.5) -> None:
-    """communicate with the server, send pong if ping request and send the move. Must desactivate 2 fire-wall in "par feu windows defender" do receive massages
+    """communicate with the server, must desactivate 2 fire-wall in "par feu windows defender" do receive massages
 
     Args:
         clientPort (int, optional): client communication free port. Defaults to 8888.
+        strategy (bool, optional): algorithm (True) or random (False). Defaults to False.
+        time_limit (float, optional): must send after this limit. Defaults to 2.5.
     """
 
     with socket.socket() as ls:
-        ls.bind(("0.0.0.0", clientPort))
+        ls.bind(("0.0.0.0", clientPort))  # localhost = "0.0.0.0"
         ls.listen()
         ls.settimeout(0.5)
         while True:
@@ -87,14 +92,14 @@ def server_communication(clientPort=8888, strategy=False, time_limit: float = 2.
                 client, address = ls.accept()
                 print(f"connection from {address}")
                 with client:
-                    # check the length of the massage to recieve (encoded json) and decode
+                    # check the length of the massage to recieve
                     len_info = client.recv(4)
                     len_mes = struct.unpack("I", len_info)[0]
                     message = client.recv(len_mes)
                     while len(message) < len_mes:
                         message += client.recv(len_mes - len(message))
-                    # should receive ping or the game state
-                    client_message = message.decode("utf-8")
+
+                    client_message = message.decode("utf-8")  # should receive ping or state
                     client_message_dict = json.loads(client_message)
 
                     # respond to ping request (to make sure we are still connected)
@@ -109,6 +114,7 @@ def server_communication(clientPort=8888, strategy=False, time_limit: float = 2.
                         mm = move_message(boardState, strategy, time_limit)
                         client.send(struct.pack("I", len(mm)))
                         client.send(mm)  # sould send the move
+
                         for error in client_message_dict["errors"]:
                             error.pop("state", None)
                         print(client_message_dict["errors"])
