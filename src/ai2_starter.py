@@ -3,7 +3,7 @@ from src.communication import inscription, server_communication
 serverIP = "192.168.129.11"
 clientPort = 8889
 smart = False
-time_limit = 2.5  # max3s on 8 games loss 1 time
+time_limit = 2.5  # max 3s
 
 if __name__ == "__main__":
     inscription("RANDOM", [33333, 44444], serverIP, clientPort)
